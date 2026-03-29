@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTFAP Tangalan - Official Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tangalan-blue: #003399;
+            --tangalan-red: #b30000;
+            --tangalan-gold: #ffd700;
+            --tangalan-yellow: #fff200;
+            --dark: #1a1a1a;
+            --bg: #f0f2f5;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--dark);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Official Gradient Header */
+        .hero {
+            background: linear-gradient(135deg, var(--tangalan-blue) 0%, #001f5c 100%);
+            color: white;
+            padding: 60px 0 100px 0;
+            text-align: center;
+            border-bottom: 6px solid var(--tangalan-gold);
+            position: relative;
+        }
+
+        /* Official Logo Styling */
+        .official-logo {
+            width: 180px;
+            height: 180px;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: -90px;
+            position: relative;
+            z-index: 10;
+            object-fit: contain;
+        }
+
+        /* Modern Card Styling */
+        .glass-card {
+            background: #ffffff;
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            padding: 30px;
+            height: 100%;
+            transition: 0.3s;
+        }
+
+        .glass-card:hover { transform: translateY(-5px); }
+
+        .section-header {
+            font-weight: 700;
+            color: var(--tangalan-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* The Assistance Highlight */
+        .money-card {
+            background: linear-gradient(135deg, var(--tangalan-red) 0%, #7a0000 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--tangalan-gold);
+        }
+
+        /* List Icons */
+        .modern-list { list-style: none; padding-left: 0; }
+        .modern-list li { padding-left: 30px; margin-bottom: 10px; position: relative; }
+        .modern-list li::before { position: absolute; left: 0; font-size: 1.1rem; }
+        .list-check li::before { content: "✔"; color: #28a745; font-weight: bold; }
+        .list-cross li::before { content: "✖"; color: var(--tangalan-red); font-weight: bold; }
+        .list-pin li::before { content: "📌"; }
+        .list-drop li::before { content: "🩸"; }
+
+        .btn-download {
+            background: var(--tangalan-yellow);
+            color: #000;
+            font-weight: 700;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 242, 0, 0.3);
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-download:hover {
+            background: var(--tangalan-gold);
+            transform: scale(1.02);
+            color: #000;
+        }
+
+        .note-box {
+            background: #fff9e6;
+            border-left: 4px solid var(--tangalan-gold);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .footer-info {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 8px solid var(--tangalan-blue);
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="container">
+        <h1 class="fw-bold">GOVERNMENT TERTIARY FINANCIAL ASSISTANCE PROGRAM</h1>
+        <p class="lead fw-light">Municipality of Tangalan, Aklan</p>
+    </div>
+</div>
+
+<div class="container text-center">
+    <img src="https://lh3.googleusercontent.com/d/1jKcYaRjsv8LBmL0gPtqywk6lXPswC5KG" alt="Tangalan Seal" class="official-logo">
+</div>
+
+<div class="container my-5">
+    
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <div class="glass-card">
+                <div class="section-header">📘 What is this program?</div>
+                <p>The <strong>GTFAP</strong> is a scholarship assistance program of the Municipal Government of Tangalan that provides financial support to qualified and deserving Tangalanon college students studying within the Province of Aklan.</p>
+                <ul class="modern-list list-check">
+                    <li>Support students from low-income families</li>
+                    <li>Promote access to college education</li>
+                    <li>Help achieve at least one professional per family</li>
+                    <li>Encourage academic excellence among Tangalanon youth</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="money-card h-100 shadow">
+                <div class="section-header justify-content-center text-white">💰 Assistance Amount</div>
+                <div class="amount">₱4,000</div>
+                <p class="fw-bold mb-3">PER SEMESTER</p>
+                <div style="height: 1px; background: rgba(255,255,255,0.2); margin: 15px 0;"></div>
+                <div class="amount" style="font-size: 2rem;">₱8,000</div>
+                <p class="fw-bold">PER ACADEMIC YEAR</p>
+                <p class="small opacity-75 mt-3">Renewable every semester subject to compliance with requirements.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="glass-card">
+                <div class="section-header">🎯 Who Can Apply?</div>
+                <ul class="modern-list list-check">
+                    <li>Natural-born Filipino</li>
+                    <li>Resident of Tangalan for at least 3 years</li>
+                    <li>Enrolled in a college within the Province of Aklan</li>
+                    <li>With no grade lower than 75%</li>
+                    <li>Family income not exceeding ₱130,000 annually</li>
+                    <li>Applicant and parent/guardian are registered voters</li>
+                    <li>Not a recipient of any other scholarship</li>
+                    <li>Not yet a college graduate</li>
+                    <li>Passed the Scholarship Qualifying Exam</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="glass-card">
+                <div class="section-header" style="color: var(--tangalan-red);">❌ Who are not qualified?</div>
+                <ul class="modern-list list-cross">
+                    <li>Already receiving another scholarship</li>
+                    <li>Have failing grades</li>
+                    <li>Not residents of Tangalan / Enrolled outside Aklan</li>
+                    <li>Family income above ₱130,000 annually</li>
+                    <li>Already graduates of any degree</li>
+                </ul>
+                <div class="note-box">
+                    <strong>👨‍👩‍👧 LIMITATION:</strong> Only one (1) member per immediate family may avail of the scholarship.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="glass-card">
+                <div class="section-header">📋 Requirements for Application</div>
+                <ul class="modern-list list-pin">
+                    <li>Accomplished Application Form</li>
+                    <li>Bio-data with 2 pcs 2×2 ID picture</li>
+                    <li>Report Card / Grades</li>
+                    <li>Certificate of Good Moral Character</li>
+                    <li>Barangay Certification of Indigency</li>
+                    <li>Voter’s Certificate (Applicant & Parent/Guardian)</li>
+                </ul>
+                <div class="note-box">
+                    <strong>MSWDO Certification:</strong> Specifically required for PWD or Solo Parent applicants to avail of priority status.
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="glass-card">
+                <div class="section-header">📚 To Continue Scholarship</div>
+                <ul class="modern-list list-check">
+                    <li>Maintain grades of 75% or higher</li>
+                    <li>Carry regular academic load (Not drop subjects)</li>
+                    <li>Submit grades every semester</li>
+                    <li>Participate in community service activities</li>
+                    <li>Plant at least 5 seedlings per semester</li>
+                </ul>
+                <ul class="modern-list list-drop">
+                    <li><strong>Optional:</strong> Blood donation to MHO/PRC</li>
+                </ul>
+                <a href="https://docs.google.com/document/d/1bhjrAnXu0dI0tFwiykz5aiLJP5L-pKk5/export?format=docx" class="btn-download mt-3">
+                    📥 DOWNLOAD APPLICATION FORM (.DOCX)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-info text-center shadow-sm">
+        <div class="section-header justify-content-center">📍 Where to apply?</div>
+        <h5 class="fw-bold mb-1">Office of the Municipal Mayor</h5>
+        <p class="text-muted mb-2">through the Scholarship Program Secretariat</p>
+        <p class="mb-0 bg-light d-inline-block px-4 py-2 rounded-pill fw-bold" style="color: var(--tangalan-blue);">Second Floor, Municipal Building, Municipality of Tangalan, Aklan</p>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
