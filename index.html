@@ -20,6 +20,28 @@
             background-color: var(--bg);
             color: var(--dark);
             font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+
+        /* Running Text / Marquee Style */
+        .deadline-marquee {
+            background: var(--tangalan-yellow);
+            color: #000;
+            font-weight: 700;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: 2px solid var(--tangalan-gold);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
         /* Official Gradient Header */
@@ -133,6 +155,12 @@
     </style>
 </head>
 <body>
+
+<div class="deadline-marquee">
+    <div class="marquee-content">
+        ⚠️ ATTENTION: SUBMISSION DEADLINE FOR APPLICATIONS IS ON APRIL 27, 2026. PLEASE SUBMIT ALL REQUIREMENTS ON TIME. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ⚠️ ATTENTION: SUBMISSION DEADLINE FOR APPLICATIONS IS ON APRIL 27, 2026. PLEASE SUBMIT ALL REQUIREMENTS ON TIME.
+    </div>
+</div>
 
 <div class="hero">
     <div class="container">
@@ -251,6 +279,7 @@
         <div class="section-header justify-content-center">📍 Where to apply?</div>
         <h5 class="fw-bold mb-1">Office of the Municipal Mayor</h5>
         <p class="text-muted mb-2">through the Scholarship Program Secretariat</p>
+        <p class="fw-bold mb-3" style="color: var(--tangalan-blue); font-size: 1.1rem;">MR. REYMARC JASON T. TAMPOS</p>
         <p class="mb-0 bg-light d-inline-block px-4 py-2 rounded-pill fw-bold" style="color: var(--tangalan-blue);">Second Floor, Municipal Building, Municipality of Tangalan, Aklan</p>
     </div>
 
