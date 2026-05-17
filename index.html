@@ -345,6 +345,10 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            #slip-status-banner {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
         }
     </style>
 </head>
@@ -460,7 +464,7 @@
                                         <p class="small text-white opacity-75 mb-0">Municipality of Tangalan, Province of Aklan • S.Y. 2026-2027</p>
                                     </div>
                                     <div class="col-sm-3 text-sm-end mt-3 mt-sm-0">
-                                        <span class="badge bg-success px-3 py-2 text-white"><i class="fas fa-check-circle me-1"></i> VERIFIED</span>
+                                        <span id="slip-status-badge" class="badge bg-success px-3 py-2 text-white"><i class="fas fa-check-circle me-1"></i> VERIFIED</span>
                                     </div>
                                 </div>
                             </div>
@@ -493,9 +497,18 @@
                                             </div>
                                         </div>
 
+                                        <!-- Dynamic Eligibility Status Notification Box -->
+                                        <div id="slip-status-banner" class="p-3 mb-3 rounded-3 d-flex align-items-center gap-3">
+                                            <i id="slip-status-icon" class="fs-4"></i>
+                                            <div>
+                                                <strong id="slip-status-title" class="d-block uppercase tracking-wide font-monospace mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">APPLICATION STATUS</strong>
+                                                <span id="slip-status-text" class="fw-bold" style="font-size: 0.85rem; line-height: 1.3;">Checking status...</span>
+                                            </div>
+                                        </div>
+
                                         <hr class="text-muted opacity-25">
 
-                                        <!-- Examination Schedule Blocks (Includes newly requested Exam Date!) -->
+                                        <!-- Examination Schedule Blocks (Includes Examination Date!) -->
                                         <div class="row mb-3 g-2">
                                             <div class="col-sm-4 col-12">
                                                 <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">EXAMINATION DATE</span>
@@ -511,7 +524,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="p-3 bg-light rounded-3 border-start border-primary border-3 mb-3">
+                                        <div id="slip-venue-container" class="p-3 bg-light rounded-3 border-start border-primary border-3 mb-3">
                                             <span class="text-primary text-uppercase font-monospace d-block mb-1" style="font-size: 0.75rem;"><i class="fas fa-building-columns"></i> EXAM VENUE LOCATION</span>
                                             <p class="small fw-bold text-dark mb-0" id="slip-venue">Tangalan National High School</p>
                                         </div>
@@ -706,12 +719,12 @@
     // Default Fallback Photo Url if applicant has none
     const defaultAvatarUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
 
-    // Fallback Offline Records (updated with Examination Dates)
+    // Fallback Offline Records (updated with status and remarks for testing)
     const backupMockData = [
-        { applicantNumber: "GTFAP-2026-001", lastName: "DELA CRUZ", firstName: "JUAN", middleName: "SISON", address: "Brgy. Poblacion, Tangalan, Aklan", roomAssignment: "Room 101 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
-        { applicantNumber: "GTFAP-2026-002", lastName: "ILUSTRE", firstName: "MARIA", middleName: "CLARA", address: "Brgy. Jawili, Tangalan, Aklan", roomAssignment: "Room 203 (Senior High Bldg)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" },
-        { applicantNumber: "GTFAP-2026-003", lastName: "RIZAL", firstName: "JOSE PROTACIO", middleName: "ALONZO", address: "Brgy. Tondog, Tangalan, Aklan", roomAssignment: "Gymnasium - Table B", time: "01:30 PM - 04:30 PM", venue: "Tangalan Municipal Gymnasium", examDate: "May 26, 2026", photoUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80" },
-        { applicantNumber: "GTFAP-2026-004", lastName: "AGUINALDO", firstName: "EMILIO", middleName: "FLORES", address: "Brgy. Panayakan, Tangalan, Aklan", roomAssignment: "Room 102 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", photoUrl: "" }
+        { applicantNumber: "GTFAP-2026-001", lastName: "DELA CRUZ", firstName: "JUAN", middleName: "SISON", address: "Brgy. Poblacion, Tangalan, Aklan", roomAssignment: "Room 101 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", status: "Recommended", remarks: "Complete qualifications and clearances verified.", photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-002", lastName: "ILUSTRE", firstName: "MARIA", middleName: "CLARA", address: "Brgy. Jawili, Tangalan, Aklan", roomAssignment: "Room 203 (Senior High Bldg)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", status: "Denied", remarks: "Family annual income exceeds the maximum threshold limit of ₱130,000.", photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-003", lastName: "RIZAL", firstName: "JOSE PROTACIO", middleName: "ALONZO", address: "Brgy. Tondog, Tangalan, Aklan", roomAssignment: "Gymnasium - Table B", time: "01:30 PM - 04:30 PM", venue: "Tangalan Municipal Gymnasium", examDate: "May 26, 2026", status: "Recommended", remarks: "Priority Indigent Status granted.", photoUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-004", lastName: "AGUINALDO", firstName: "EMILIO", middleName: "FLORES", address: "Brgy. Panayakan, Tangalan, Aklan", roomAssignment: "Room 102 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", status: "Denied", remarks: "Applicant or parent is not registered as a voter in Tangalan, Aklan.", photoUrl: "" }
     ];
 
     let toastModalInstance;
@@ -812,17 +825,19 @@
                         cols.forEach((header, idx) => {
                             const cell = r.c && r.c[idx] ? r.c[idx] : null;
                             let key = header;
-                            const normHeader = header.toLowerCase().replace(/\s+/g, '');
+                            const normHeader = header.toLowerCase().replace(/[^a-z0-9]/g, '');
                             
                             if (normHeader.includes("applicant")) key = "applicantNumber";
                             else if (normHeader.includes("last")) key = "lastName";
                             else if (normHeader.includes("first")) key = "firstName";
                             else if (normHeader.includes("middle")) key = "middleName";
-                            else if (normHeader.includes("address")) key = "address";
-                            else if (normHeader.includes("room")) key = "roomAssignment";
-                            else if (normHeader.includes("time")) key = "time";
-                            else if (normHeader.includes("venue")) key = "venue";
+                            else if (normHeader.includes("address") || normHeader.includes("tirahan")) key = "address";
+                            else if (normHeader.includes("room") || normHeader.includes("kwarto")) key = "roomAssignment";
+                            else if (normHeader.includes("time") || normHeader.includes("oras")) key = "time";
+                            else if (normHeader.includes("venue") || normHeader.includes("lugar")) key = "venue";
                             else if (normHeader.includes("date") || normHeader.includes("petsa")) key = "examDate";
+                            else if (normHeader.includes("status") || normHeader.includes("decision") || normHeader.includes("recommend") || normHeader.includes("state") || normHeader.includes("pasya") || normHeader.includes("katayuan")) key = "status";
+                            else if (normHeader.includes("remark") || normHeader.includes("reason") || normHeader.includes("denied") || normHeader.includes("denial") || normHeader.includes("puna") || normHeader.includes("dahilan")) key = "remarks";
                             else if (normHeader.includes("photo") || normHeader.includes("image") || normHeader.includes("picture") || normHeader.includes("pic") || normHeader.includes("larawan") || normHeader.includes("2x2")) key = "photoUrl";
 
                             recordObj[key] = cell && cell.v !== null ? String(cell.v).trim() : "";
@@ -859,15 +874,14 @@
             const mName = (matchedApplicant.middleName || '').trim().toUpperCase();
             const fullName = `${lName}, ${fName} ${mName}`.trim().replace(/\s+/g, ' ');
 
-            // Inject record detail variables
+            // Inject basic record details
             document.getElementById('slip-name').innerText = fullName;
             document.getElementById('slip-address').innerText = matchedApplicant.address || '';
-            document.getElementById('slip-date').innerText = matchedApplicant.examDate || 'May 25, 2026';
-            document.getElementById('slip-room').innerText = matchedApplicant.roomAssignment || '';
-            document.getElementById('slip-time').innerText = matchedApplicant.time || '';
-            document.getElementById('slip-venue').innerText = matchedApplicant.venue || '';
             document.getElementById('slip-qr-text').innerText = matchedApplicant.applicantNumber;
             document.getElementById('slip-hash').innerText = "HASH CODE: " + Math.abs(hashCode(matchedApplicant.applicantNumber)).toString(16).toUpperCase();
+
+            // Setup QR verification image
+            document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(matchedApplicant.applicantNumber + ' | ' + fullName + ' | ' + (matchedApplicant.roomAssignment || 'N/A'))}`;
 
             // Handle ID Photo injection & Fallback mapping using our resolver function
             const photoEl = document.getElementById('slip-photo');
@@ -878,16 +892,69 @@
             } else {
                 photoEl.src = defaultAvatarUrl;
             }
-            // If the user's provided link breaks or fails to load, trigger fallback avatar
             photoEl.onerror = function() {
                 this.src = defaultAvatarUrl;
             };
 
-            // Setup QR verification image
-            document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(matchedApplicant.applicantNumber + ' | ' + fullName + ' | ' + matchedApplicant.roomAssignment)}`;
+            // DYNAMIC STATUS RESOLVER LOGIC
+            const rawStatus = (matchedApplicant.status || '').trim().toLowerCase();
+            const remarks = (matchedApplicant.remarks || '').trim();
+            const badgeEl = document.getElementById('slip-status-badge');
+            const statusBoxEl = document.getElementById('slip-status-banner');
+            const statusIconEl = document.getElementById('slip-status-icon');
+            const statusTextEl = document.getElementById('slip-status-text');
+            const venueContainerEl = document.getElementById('slip-venue-container');
+
+            // Flag checking if applicant is disapproved
+            const isDenied = rawStatus.includes('deny') || 
+                             rawStatus.includes('denied') || 
+                             rawStatus.includes('disapprove') || 
+                             rawStatus.includes('disapproved') || 
+                             rawStatus.includes('reject') || 
+                             rawStatus.includes('rejected') || 
+                             rawStatus.includes('failed') || 
+                             rawStatus.includes('hindi') || 
+                             rawStatus.includes('not qualified') ||
+                             rawStatus.includes('disaprobado') ||
+                             rawStatus.includes('tinanggihan');
+
+            if (isDenied) {
+                // Apply Denied/Disapproved Styles
+                badgeEl.className = "badge bg-danger px-3 py-2 text-white";
+                badgeEl.innerHTML = '<i class="fas fa-times-circle me-1"></i> DISAPPROVED';
+
+                statusBoxEl.className = "p-3 mb-3 rounded-3 d-flex align-items-center gap-3 bg-danger-subtle border-start border-danger border-4 text-danger";
+                statusIconEl.className = "fas fa-times-circle fs-4 text-danger";
+                statusTextEl.innerHTML = `<strong>Denied due to the following reason/s:</strong><br>${remarks || 'Does not meet program qualifications.'}`;
+
+                // Set exam metadata blocks to N/A with a strikethrough layout
+                document.getElementById('slip-date').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
+                document.getElementById('slip-time').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
+                document.getElementById('slip-room').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
+                
+                // Canceled Venue styling
+                venueContainerEl.className = "p-3 bg-light rounded-3 border-start border-danger border-3 mb-3 text-muted";
+                document.getElementById('slip-venue').innerHTML = `<span class="text-decoration-line-through">Not Applicable (Application Disapproved)</span>`;
+            } else {
+                // Apply Recommended Styles (Default)
+                badgeEl.className = "badge bg-success px-3 py-2 text-white";
+                badgeEl.innerHTML = '<i class="fas fa-check-circle me-1"></i> VERIFIED';
+
+                statusBoxEl.className = "p-3 mb-3 rounded-3 d-flex align-items-center gap-3 bg-success-subtle border-start border-success border-4 text-success";
+                statusIconEl.className = "fas fa-check-circle fs-4 text-success";
+                statusTextEl.innerHTML = `<strong>Recommended for Examination</strong>${remarks ? '<br><span class="small text-muted">' + remarks + '</span>' : ''}`;
+
+                // Inject active exam schedules
+                document.getElementById('slip-date').innerText = matchedApplicant.examDate || 'May 25, 2026';
+                document.getElementById('slip-time').innerText = matchedApplicant.time || '';
+                document.getElementById('slip-room').innerText = matchedApplicant.roomAssignment || '';
+                
+                // Normal Venue styling
+                venueContainerEl.className = "p-3 bg-light rounded-3 border-start border-primary border-3 mb-3";
+                document.getElementById('slip-venue').innerText = matchedApplicant.venue || '';
+            }
 
             slipContainer.classList.remove('d-none');
-            // Auto scroll to the slip output card elegantly
             slipContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else {
             alertBox.classList.remove('d-none');
@@ -896,7 +963,6 @@
         }
     }
 
-    // Loader helper functions
     function updateLoader(pct, text) {
         document.getElementById('loader-progress-bar').style.width = pct + '%';
         document.getElementById('loader-status-text').innerText = text;
