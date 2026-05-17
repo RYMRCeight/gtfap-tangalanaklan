@@ -495,14 +495,19 @@
 
                                         <hr class="text-muted opacity-25">
 
-                                        <div class="row mb-3">
-                                            <div class="col-6">
-                                                <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">ROOM ASSIGNMENT</span>
-                                                <p class="fw-bold text-dark mb-0 fs-5" id="slip-room">Room 101</p>
+                                        <!-- Examination Schedule Blocks (Includes newly requested Exam Date!) -->
+                                        <div class="row mb-3 g-2">
+                                            <div class="col-sm-4 col-12">
+                                                <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">EXAMINATION DATE</span>
+                                                <p class="fw-bold text-dark mb-0" id="slip-date">May 25, 2026</p>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-sm-4 col-6">
                                                 <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">EXAMINATION TIME</span>
                                                 <p class="fw-bold text-dark mb-0" id="slip-time">09:00 AM - 12:00 PM</p>
+                                            </div>
+                                            <div class="col-sm-4 col-6">
+                                                <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">ROOM ASSIGNMENT</span>
+                                                <p class="fw-bold text-dark mb-0 fs-5" id="slip-room" style="line-height: 1.2;">Room 101</p>
                                             </div>
                                         </div>
 
@@ -701,12 +706,12 @@
     // Default Fallback Photo Url if applicant has none
     const defaultAvatarUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
 
-    // Fallback Offline Records (now updated with sample avatar photo links)
+    // Fallback Offline Records (updated with Examination Dates)
     const backupMockData = [
-        { applicantNumber: "GTFAP-2026-001", lastName: "DELA CRUZ", firstName: "JUAN", middleName: "SISON", address: "Brgy. Poblacion, Tangalan, Aklan", roomAssignment: "Room 101 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
-        { applicantNumber: "GTFAP-2026-002", lastName: "ILUSTRE", firstName: "MARIA", middleName: "CLARA", address: "Brgy. Jawili, Tangalan, Aklan", roomAssignment: "Room 203 (Senior High Bldg)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" },
-        { applicantNumber: "GTFAP-2026-003", lastName: "RIZAL", firstName: "JOSE PROTACIO", middleName: "ALONZO", address: "Brgy. Tondog, Tangalan, Aklan", roomAssignment: "Gymnasium - Table B", time: "01:30 PM - 04:30 PM", venue: "Tangalan Municipal Gymnasium", photoUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80" },
-        { applicantNumber: "GTFAP-2026-004", lastName: "AGUINALDO", firstName: "EMILIO", middleName: "FLORES", address: "Brgy. Panayakan, Tangalan, Aklan", roomAssignment: "Room 102 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", photoUrl: "" }
+        { applicantNumber: "GTFAP-2026-001", lastName: "DELA CRUZ", firstName: "JUAN", middleName: "SISON", address: "Brgy. Poblacion, Tangalan, Aklan", roomAssignment: "Room 101 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-002", lastName: "ILUSTRE", firstName: "MARIA", middleName: "CLARA", address: "Brgy. Jawili, Tangalan, Aklan", roomAssignment: "Room 203 (Senior High Bldg)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-003", lastName: "RIZAL", firstName: "JOSE PROTACIO", middleName: "ALONZO", address: "Brgy. Tondog, Tangalan, Aklan", roomAssignment: "Gymnasium - Table B", time: "01:30 PM - 04:30 PM", venue: "Tangalan Municipal Gymnasium", examDate: "May 26, 2026", photoUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-004", lastName: "AGUINALDO", firstName: "EMILIO", middleName: "FLORES", address: "Brgy. Panayakan, Tangalan, Aklan", roomAssignment: "Room 102 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", examDate: "May 25, 2026", photoUrl: "" }
     ];
 
     let toastModalInstance;
@@ -817,6 +822,7 @@
                             else if (normHeader.includes("room")) key = "roomAssignment";
                             else if (normHeader.includes("time")) key = "time";
                             else if (normHeader.includes("venue")) key = "venue";
+                            else if (normHeader.includes("date") || normHeader.includes("petsa")) key = "examDate";
                             else if (normHeader.includes("photo") || normHeader.includes("image") || normHeader.includes("picture") || normHeader.includes("pic") || normHeader.includes("larawan") || normHeader.includes("2x2")) key = "photoUrl";
 
                             recordObj[key] = cell && cell.v !== null ? String(cell.v).trim() : "";
@@ -856,6 +862,7 @@
             // Inject record detail variables
             document.getElementById('slip-name').innerText = fullName;
             document.getElementById('slip-address').innerText = matchedApplicant.address || '';
+            document.getElementById('slip-date').innerText = matchedApplicant.examDate || 'May 25, 2026';
             document.getElementById('slip-room').innerText = matchedApplicant.roomAssignment || '';
             document.getElementById('slip-time').innerText = matchedApplicant.time || '';
             document.getElementById('slip-venue').innerText = matchedApplicant.venue || '';
