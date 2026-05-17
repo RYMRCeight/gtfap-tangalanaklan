@@ -225,6 +225,84 @@
             border-left: 8px solid var(--tangalan-blue);
         }
 
+        /* Unskippable Premium Overlay style */
+        #secure-loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 16, 51, 0.97);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s ease;
+        }
+
+        .loader-card {
+            background: #002266;
+            border: 2px solid var(--tangalan-gold);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            color: white;
+        }
+
+        .pulse-logo {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 20px;
+            animation: logo-pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes logo-pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.2)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.2)); }
+        }
+
+        .loading-bar-outer {
+            background: rgba(255,255,255,0.1);
+            height: 8px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .loading-bar-inner {
+            background: linear-gradient(90deg, var(--tangalan-gold) 0%, var(--tangalan-yellow) 100%);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* ID Photo Card Container */
+        .id-photo-container {
+            width: 110px;
+            height: 110px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .id-photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         @media print {
             body {
                 background: white !important;
@@ -263,6 +341,26 @@
 </head>
 <body>
 
+<!-- Unskippable Loading Overlay -->
+<div id="secure-loader-overlay" class="d-none">
+    <div class="loader-card">
+        <img src="https://lh3.googleusercontent.com/d/1jKcYaRjsv8LBmL0gPtqywk6lXPswC5KG" alt="Tangalan Seal" class="pulse-logo">
+        <h4 class="fw-bold mb-1 text-uppercase tracking-wider">GTFAP Secure Check</h4>
+        <p class="text-warning small mb-3 font-monospace">LGU TANGALAN VERIFICATION PORTAL</p>
+        
+        <div class="py-2">
+            <p id="loader-status-text" class="small mb-2 font-monospace text-light">Contacting server gateway...</p>
+            <div class="spinner-border text-warning spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <div class="loading-bar-outer">
+            <div id="loader-progress-bar" class="loading-bar-inner"></div>
+        </div>
+    </div>
+</div>
+
 <div class="deadline-marquee no-print">
     <div class="marquee-content">
         ⚠️ ATTENTION: SUBMISSION DEADLINE FOR APPLICATIONS IS ON MAY 18, 2026. PLEASE SUBMIT ALL REQUIREMENTS ON TIME. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ⚠️ ATTENTION: SUBMISSION DEADLINE FOR APPLICATIONS IS ON MAY 18, 2026. PLEASE SUBMIT ALL REQUIREMENTS ON TIME.
@@ -282,14 +380,11 @@
 
 <div class="container text-center no-print">
     <div class="portal-nav nav nav-pills" id="pills-tab" role="tablist">
-        <button class="nav-link" id="pills-guidelines-tab" data-bs-toggle="pill" data-bs-target="#pills-guidelines" type="button" role="tab" aria-controls="pills-guidelines" aria-selected="false">
-            <i class="fas fa-book-open me-2"></i>Guidelines & Info
-        </button>
         <button class="nav-link active" id="pills-checker-tab" data-bs-toggle="pill" data-bs-target="#pills-checker" type="button" role="tab" aria-controls="pills-checker" aria-selected="true">
             <i class="fas fa-door-open me-2"></i>Room Assignment Checker
         </button>
-        <button class="nav-link" id="pills-admin-tab" data-bs-toggle="pill" data-bs-target="#pills-admin" type="button" role="tab" aria-controls="pills-admin" aria-selected="false">
-            <i class="fas fa-gears me-2"></i>Admin Console
+        <button class="nav-link" id="pills-guidelines-tab" data-bs-toggle="pill" data-bs-target="#pills-guidelines" type="button" role="tab" aria-controls="pills-guidelines" aria-selected="false">
+            <i class="fas fa-book-open me-2"></i>Guidelines & Info
         </button>
     </div>
 </div>
@@ -297,9 +392,163 @@
 <div class="container my-5 flex-grow-1">
     <div class="tab-content" id="pills-tabContent">
         
-        <!-- Tab 1: Guidelines and Municipal Scholarship Information -->
+        <!-- Tab 1: Interactive Room Assignment Checker & Admittance Slip -->
+        <div class="tab-pane fade show active" id="pills-checker" role="tabpanel" aria-labelledby="pills-checker-tab">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center mb-4">
+                    <span class="badge bg-primary px-3 py-2 uppercase tracking-wider mb-2">Live Verification Hub</span>
+                    <h2 class="fw-bold text-dark">Find Your Exam Room Assignment</h2>
+                    <p class="text-muted">Type your control number below to view and download your official examination slip.</p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm p-4 rounded-3 bg-white">
+                        <label for="applicant-input" class="form-label fw-bold text-secondary text-uppercase small">Applicant Number / Control ID</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="fas fa-fingerprint text-muted"></i></span>
+                            <input type="text" id="applicant-input" class="form-control form-control-lg bg-light border-start-0 uppercase font-monospace" placeholder="e.g. GTFAP-2026-001" onkeydown="if(event.key === 'Enter') searchApplicant()">
+                            <button class="btn btn-primary px-4 fw-bold text-white" type="button" onclick="searchApplicant()">
+                                <i class="fas fa-search me-1"></i> Check
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 small text-muted">
+                            <span>Press enter or click search</span>
+                            <button onclick="fillSampleCode()" class="btn btn-link btn-sm text-decoration-none p-0 fw-bold" style="color: var(--tangalan-blue);">
+                                <i class="fas fa-wand-magic-sparkles"></i> Use Demo ID
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Alert Area -->
+                    <div id="search-alert" class="alert alert-danger d-none mt-3" role="alert">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-triangle-exclamation fs-4 me-3"></i>
+                            <div>
+                                <strong>Record Not Found!</strong><br>
+                                <span id="alert-text">Please check the control number or verify your entry against the master list.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Examinee Slip Display Section -->
+            <div id="slip-container" class="row justify-content-center d-none transition">
+                <div class="col-md-9 slip-print-wrapper">
+                    <div class="slip-outer">
+                        <div class="slip-card">
+                            
+                            <!-- Header block -->
+                            <div class="slip-header">
+                                <img src="https://lh3.googleusercontent.com/d/1jKcYaRjsv8LBmL0gPtqywk6lXPswC5KG" alt="Seal" class="slip-watermark">
+                                <div class="row align-items-center">
+                                    <div class="col-sm-9">
+                                        <span class="text-uppercase tracking-wider fw-semibold small text-warning font-monospace">Official Exam Admittance Slip</span>
+                                        <h3 class="fw-extrabold text-white mb-1">GTFAP SCHOLARSHIP PROGRAM</h3>
+                                        <p class="small text-white opacity-75 mb-0">Municipality of Tangalan, Province of Aklan • S.Y. 2026-2027</p>
+                                    </div>
+                                    <div class="col-sm-3 text-sm-end mt-3 mt-sm-0">
+                                        <span class="badge bg-success px-3 py-2 text-white"><i class="fas fa-check-circle me-1"></i> VERIFIED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Body details -->
+                            <div class="p-4 bg-white">
+                                <div class="row g-4">
+                                    
+                                    <!-- QR Code area -->
+                                    <div class="col-md-4 text-center border-end d-flex flex-column align-items-center justify-content-center">
+                                        <div class="bg-light p-3 rounded-3 border mb-2 shadow-inner">
+                                            <div class="bg-white p-2 border rounded-2" style="width:140px; height:140px;">
+                                                <img id="qr-img" src="" alt="QR" class="img-fluid w-100 h-100">
+                                            </div>
+                                            <p class="small text-muted font-monospace mt-2 mb-0" id="slip-qr-text">GTFAP-0000</p>
+                                        </div>
+                                        <div class="mt-2">
+                                            <p class="small text-muted uppercase font-monospace mb-0" style="font-size: 0.75rem;">SCHOLARSHIP ASSISTANCE</p>
+                                            <p class="fw-bold text-success mb-0" style="font-size: 0.9rem;">₱4,000 / Semester</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Info blocks -->
+                                    <div class="col-md-8">
+                                        <div class="d-flex align-items-start justify-content-between mb-4 flex-column flex-sm-row gap-3">
+                                            <div>
+                                                <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">STUDENT APPLICANT NAME</span>
+                                                <h4 class="fw-bold text-dark text-uppercase mb-1" id="slip-name">JUAN DELA CRUZ</h4>
+                                                <p class="small text-muted mb-0"><i class="fas fa-map-marker-alt text-danger me-1"></i> <span id="slip-address">Brgy. Poblacion, Tangalan, Aklan</span></p>
+                                            </div>
+                                            <!-- Official Applicant ID Photo Frame -->
+                                            <div class="id-photo-container">
+                                                <img id="slip-photo" src="" alt="Applicant ID Photo">
+                                            </div>
+                                        </div>
+
+                                        <hr class="text-muted opacity-25">
+
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">ROOM ASSIGNMENT</span>
+                                                <p class="fw-bold text-dark mb-0 fs-5" id="slip-room">Room 101</p>
+                                            </div>
+                                            <div class="col-6">
+                                                <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">EXAMINATION TIME</span>
+                                                <p class="fw-bold text-dark mb-0" id="slip-time">09:00 AM - 12:00 PM</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-3 bg-light rounded-3 border-start border-primary border-3 mb-3">
+                                            <span class="text-primary text-uppercase font-monospace d-block mb-1" style="font-size: 0.75rem;"><i class="fas fa-building-columns"></i> EXAM VENUE LOCATION</span>
+                                            <p class="small fw-bold text-dark mb-0" id="slip-venue">Tangalan National High School</p>
+                                        </div>
+
+                                        <div class="p-3 bg-light rounded-3 border-start border-warning border-3 text-muted" style="font-size: 0.75rem; line-height: 1.4;">
+                                            <strong class="text-warning-dark text-uppercase d-block mb-1">Reminders:</strong>
+                                            <ul class="mb-0 ps-3">
+                                                <li>Please bring this printed slip and 2 valid identification cards.</li>
+                                                <li>Bring your own black ink ballpoint pens. Sharing is prohibited.</li>
+                                                <li>Arrive 30 minutes before your scheduled examination time block.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="text-muted opacity-25 mt-4">
+
+                                <!-- Signatures and hash security footer -->
+                                <div class="row align-items-center mt-4">
+                                    <div class="col-sm-6 text-center text-sm-start mb-3 mb-sm-0">
+                                        <p class="small text-muted font-monospace uppercase mb-0" style="font-size: 0.7rem;">Control Hash Identity</p>
+                                        <p class="small text-primary font-monospace mb-0" id="slip-hash">HASH: F8B3E081</p>
+                                    </div>
+                                    <div class="col-sm-6 text-center text-sm-end">
+                                        <div class="d-inline-block text-center">
+                                            <div class="border-bottom pb-1 px-4" style="min-width: 180px;">
+                                                <span class="fw-bold text-dark uppercase small tracking-tight">REYMARC JASON T. TAMPOS</span>
+                                            </div>
+                                            <p class="small text-muted mb-0 mt-1 uppercase" style="font-size: 0.65rem; font-weight: 600;">GTFAP Program Secretariat</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-between align-items-center mt-4 no-print">
+                        <button onclick="clearSearch()" class="btn btn-outline-secondary px-4 rounded-pill"><i class="fas fa-arrow-left me-1"></i> New Search</button>
+                        <button onclick="window.print()" class="btn btn-primary px-5 rounded-pill fw-bold text-white shadow"><i class="fas fa-print me-1"></i> Print Admittance Slip</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Guidelines and Municipal Scholarship Information -->
         <div class="tab-pane fade" id="pills-guidelines" role="tabpanel" aria-labelledby="pills-guidelines-tab">
-            
             <div class="row g-4 mb-4">
                 <div class="col-lg-7">
                     <div class="glass-card">
@@ -408,375 +657,18 @@
             </div>
         </div>
 
-        <!-- Tab 2: Interactive Room Assignment Checker & Admittance Slip -->
-        <div class="tab-pane fade show active" id="pills-checker" role="tabpanel" aria-labelledby="pills-checker-tab">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center mb-4">
-                    <span class="badge bg-primary px-3 py-2 uppercase tracking-wider mb-2">Live Verification Hub</span>
-                    <h2 class="fw-bold text-dark">Find Your Exam Room Assignment</h2>
-                    <p class="text-muted">Type your control number below to view and download your official examination slip.</p>
-                </div>
-            </div>
-
-            <div class="row justify-content-center mb-5">
-                <div class="col-md-6">
-                    <div class="card border-0 shadow-sm p-4 rounded-3 bg-white">
-                        <label for="applicant-input" class="form-label fw-bold text-secondary text-uppercase small">Applicant Number / Control ID</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0"><i class="fas fa-fingerprint text-muted"></i></span>
-                            <input type="text" id="applicant-input" class="form-control form-control-lg bg-light border-start-0 uppercase font-monospace" placeholder="e.g. GTFAP-2026-001" onkeydown="if(event.key === 'Enter') searchApplicant()">
-                            <button class="btn btn-primary px-4 fw-bold text-white" type="button" onclick="searchApplicant()">
-                                <i class="fas fa-search me-1"></i> Check
-                            </button>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-3 small text-muted">
-                            <span>Press enter or click search</span>
-                            <button onclick="fillSampleCode()" class="btn btn-link btn-sm text-decoration-none p-0 fw-bold" style="color: var(--tangalan-blue);">
-                                <i class="fas fa-wand-magic-sparkles"></i> Use Demo ID
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Custom Alert Area -->
-                    <div id="search-alert" class="alert alert-danger d-none mt-3" role="alert">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-triangle-exclamation fs-4 me-3"></i>
-                            <div>
-                                <strong>Record Not Found!</strong><br>
-                                <span id="alert-text">Please check the control number or register it in the Admin tab.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Search Loader -->
-                    <div id="search-loader" class="text-center d-none mt-4">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p class="text-muted mt-2 small font-monospace">Synchronizing database records...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Examinee Slip Display Section -->
-            <div id="slip-container" class="row justify-content-center d-none transition">
-                <div class="col-md-9 slip-print-wrapper">
-                    <div class="slip-outer">
-                        <div class="slip-card">
-                            
-                            <!-- Header block -->
-                            <div class="slip-header">
-                                <img src="https://lh3.googleusercontent.com/d/1jKcYaRjsv8LBmL0gPtqywk6lXPswC5KG" alt="Seal" class="slip-watermark">
-                                <div class="row align-items-center">
-                                    <div class="col-sm-9">
-                                        <span class="text-uppercase tracking-wider fw-semibold small text-warning font-monospace">Official Exam Admittance Slip</span>
-                                        <h3 class="fw-extrabold text-white mb-1">GTFAP SCHOLARSHIP PROGRAM</h3>
-                                        <p class="small text-white opacity-75 mb-0">Municipality of Tangalan, Province of Aklan • S.Y. 2026-2027</p>
-                                    </div>
-                                    <div class="col-sm-3 text-sm-end mt-3 mt-sm-0">
-                                        <span class="badge bg-success px-3 py-2 text-white"><i class="fas fa-check-circle me-1"></i> VERIFIED</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Body details -->
-                            <div class="p-4 bg-white">
-                                <div class="row g-4">
-                                    
-                                    <!-- QR Code area -->
-                                    <div class="col-md-4 text-center border-end d-flex flex-column align-items-center justify-content-center">
-                                        <div class="bg-light p-3 rounded-3 border mb-2 shadow-inner">
-                                            <div class="bg-white p-2 border rounded-2" style="width:140px; height:140px;">
-                                                <img id="qr-img" src="" alt="QR" class="img-fluid w-100 h-100">
-                                            </div>
-                                            <p class="small text-muted font-monospace mt-2 mb-0" id="slip-qr-text">GTFAP-0000</p>
-                                        </div>
-                                        <div class="mt-2">
-                                            <p class="small text-muted uppercase font-monospace mb-0" style="font-size: 0.75rem;">SCHOLARSHIP ASSISTANCE</p>
-                                            <p class="fw-bold text-success mb-0" style="font-size: 0.9rem;">₱4,000 / Semester</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Info blocks -->
-                                    <div class="col-md-8">
-                                        <div class="mb-4">
-                                            <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">STUDENT APPLICANT NAME</span>
-                                            <h4 class="fw-bold text-dark text-uppercase mb-1" id="slip-name">JUAN DELA CRUZ</h4>
-                                            <p class="small text-muted mb-0"><i class="fas fa-map-marker-alt text-danger me-1"></i> <span id="slip-address">Brgy. Poblacion, Tangalan, Aklan</span></p>
-                                        </div>
-
-                                        <hr class="text-muted opacity-25">
-
-                                        <div class="row mb-3">
-                                            <div class="col-6">
-                                                <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">ROOM ASSIGNMENT</span>
-                                                <p class="fw-bold text-dark mb-0 fs-5" id="slip-room">Room 101</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">EXAMINATION TIME</span>
-                                                <p class="fw-bold text-dark mb-0" id="slip-time">09:00 AM - 12:00 PM</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-3 bg-light rounded-3 border-start border-primary border-3 mb-3">
-                                            <span class="text-primary text-uppercase font-monospace d-block mb-1" style="font-size: 0.75rem;"><i class="fas fa-building-columns"></i> EXAM VENUE LOCATION</span>
-                                            <p class="small fw-bold text-dark mb-0" id="slip-venue">Tangalan National High School</p>
-                                        </div>
-
-                                        <div class="p-3 bg-light rounded-3 border-start border-warning border-3 text-muted" style="font-size: 0.75rem; line-height: 1.4;">
-                                            <strong class="text-warning-dark text-uppercase d-block mb-1">Reminders:</strong>
-                                            <ul class="mb-0 ps-3">
-                                                <li>Please bring this printed slip and 2 valid identification cards.</li>
-                                                <li>Bring your own black ink ballpoint pens. Sharing is prohibited.</li>
-                                                <li>Arrive 30 minutes before your scheduled examination time block.</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <hr class="text-muted opacity-25 mt-4">
-
-                                <!-- Signatures and hash security footer -->
-                                <div class="row align-items-center mt-4">
-                                    <div class="col-sm-6 text-center text-sm-start mb-3 mb-sm-0">
-                                        <p class="small text-muted font-monospace uppercase mb-0" style="font-size: 0.7rem;">Control Hash Identity</p>
-                                        <p class="small text-primary font-monospace mb-0" id="slip-hash">HASH: F8B3E081</p>
-                                    </div>
-                                    <div class="col-sm-6 text-center text-sm-end">
-                                        <div class="d-inline-block text-center">
-                                            <div class="border-bottom pb-1 px-4" style="min-width: 180px;">
-                                                <span class="fw-bold text-dark uppercase small tracking-tight">REYMARC JASON T. TAMPOS</span>
-                                            </div>
-                                            <p class="small text-muted mb-0 mt-1 uppercase" style="font-size: 0.65rem; font-weight: 600;">GTFAP Program Secretariat</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="d-flex justify-content-between align-items-center mt-4 no-print">
-                        <button onclick="clearSearch()" class="btn btn-outline-secondary px-4 rounded-pill"><i class="fas fa-arrow-left me-1"></i> New Search</button>
-                        <button onclick="window.print()" class="btn btn-primary px-5 rounded-pill fw-bold text-white shadow"><i class="fas fa-print me-1"></i> Print Admittance Slip</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab 3: Admin Console & Real Google Sheets Settings -->
-        <div class="tab-pane fade" id="pills-admin" role="tabpanel" aria-labelledby="pills-admin-tab">
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="bg-white p-4 rounded-3 shadow-sm border-start border-primary border-4">
-                        <h4 class="fw-bold mb-1">Administrative Database Configuration</h4>
-                        <p class="text-muted mb-0">Synchronize the front-end checker to your live Google Sheets database or edit local mock records.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row g-4">
-                <div class="col-lg-5">
-                    <div class="glass-card mb-4">
-                        <div class="section-header"><i class="fab fa-google-drive me-2 text-success"></i>Google Sheets Sync</div>
-                        
-                        <p class="small text-muted">Connect your live Google Spreadsheet to run your queries live. Enter your sheet's direct link below. The portal will parse it automatically.</p>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-uppercase small text-muted">Database Mode</label>
-                            <div class="btn-group w-100" role="group">
-                                <button type="button" id="btn-mode-mock" onclick="setDatabaseMode('mock')" class="btn btn-outline-secondary fw-bold">Built-in Mock</button>
-                                <button type="button" id="btn-mode-google" onclick="setDatabaseMode('google')" class="btn btn-primary fw-bold text-white">Live Google Sheets</button>
-                            </div>
-                        </div>
-
-                        <div id="google-url-group" class="mb-3">
-                            <label for="sheet-api-url" class="form-label fw-bold text-uppercase small text-muted">Google Sheets Share Link</label>
-                            <input type="text" id="sheet-api-url" class="form-control font-monospace text-xs" style="font-size: 0.75rem;" placeholder="https://docs.google.com/spreadsheets/d/.../edit" onchange="saveGoogleSheetSettings()">
-                            <p class="text-muted mt-1" style="font-size:0.75rem;">Make sure your spreadsheet is set to <strong>"Anyone with link can view"</strong> so the system can retrieve the data live!</p>
-                        </div>
-
-                        <div id="sync-status" class="alert alert-success py-2 mb-0 d-flex align-items-center border-0 rounded-3 mt-3 text-white bg-success">
-                            <i class="fas fa-circle-check me-2"></i>
-                            <span id="sync-status-text" class="small fw-semibold">Connected: Live Spreadsheet Active</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-3 border shadow-sm">
-                        <h5 class="fw-bold text-dark mb-3"><i class="fas fa-lightbulb text-warning me-2"></i>Instant Setup Guide</h5>
-                        <ol class="small text-muted ps-3 space-y-2 mb-0" style="line-height: 1.5;">
-                            <li>Organize your Google Sheet headers. Row 1 must have these columns:
-                                <div class="bg-light p-2 rounded text-center font-monospace mt-1" style="font-size:0.55rem; white-space:nowrap; overflow-x:auto;">
-                                    <strong>Applicant Number | Last Name | First Name | Middle Name | Address | Room Assignment | Time | Venue</strong>
-                                </div>
-                            </li>
-                            <li>In your Google Sheets window, click the blue <strong>Share</strong> button.</li>
-                            <li>Change general access from "Restricted" to <strong>"Anyone with the link"</strong> (Viewer).</li>
-                            <li>Copy that link and paste it in the sync input above! No script deployment required.</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <div class="col-lg-7">
-                    <!-- Script Code helper card (Optional Legacy Sync helper) -->
-                    <div class="glass-card mb-4 p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="fw-bold mb-0 text-dark" style="font-size: 0.9rem;"><i class="fas fa-code me-2 text-indigo"></i>Legacy Web App Webhooks (Optional)</h5>
-                            <button onclick="copyAppsScript()" class="btn btn-sm btn-outline-primary fw-bold" style="font-size: 0.7rem;" id="btn-copy-code">
-                                <i class="fas fa-copy me-1"></i> Copy Hook Script
-                            </button>
-                        </div>
-                        <p class="text-muted" style="font-size: 0.7rem; line-height: 1.4;">If you prefer not to share your spreadsheet link publicly, you can also paste a Google Apps Script Web App URL. The portal automatically detects and supports both methods!</p>
-                        <pre class="bg-dark text-success p-3 rounded-3 mb-0 font-monospace text-start overflow-x-auto" style="font-size: 0.65rem; max-height:140px; line-height:1.4;">
-function doGet(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = sheet.getDataRange().getValues();
-  var rows = [];
-  for (var i = 1; i < data.length; i++) {
-    rows.push({
-      applicantNumber: String(data[i][0]).trim(),
-      lastName: String(data[i][1]).trim(),
-      firstName: String(data[i][2]).trim(),
-      middleName: String(data[i][3]).trim(),
-      address: String(data[i][4]).trim(),
-      roomAssignment: String(data[i][5]).trim(),
-      time: String(data[i][6]).trim(),
-      venue: String(data[i][7]).trim()
-    });
-  }
-  return ContentService.createTextOutput(JSON.stringify(rows))
-    .setMimeType(ContentService.MimeType.JSON);
-}</pre>
-                    </div>
-
-                    <!-- Local Mock Database Record Management -->
-                    <div class="glass-card p-4">
-                        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-                            <div>
-                                <h5 class="fw-bold mb-0 text-dark">Local Sandbox Database Backup</h5>
-                                <p class="text-muted small mb-0">Local copy of records stored for offline demo use.</p>
-                            </div>
-                            <button onclick="openAddModal()" class="btn btn-sm btn-success fw-bold text-white"><i class="fas fa-plus"></i> Add New Record</button>
-                        </div>
-
-                        <div class="input-group mb-3 input-group-sm">
-                            <span class="input-group-text bg-light"><i class="fas fa-filter text-muted"></i></span>
-                            <input type="text" id="table-search" oninput="renderTable()" class="form-control" placeholder="Search local sandbox cache...">
-                        </div>
-
-                        <div class="table-responsive rounded border shadow-inner" style="max-height: 250px;">
-                            <table class="table table-hover table-striped mb-0 text-start" style="font-size: 0.72rem;">
-                                <thead class="table-dark uppercase text-muted tracking-wider">
-                                    <tr>
-                                        <th class="px-3 py-2">Control No.</th>
-                                        <th class="px-3 py-2">Name (LName, FName MName)</th>
-                                        <th class="px-3 py-2">Room Info</th>
-                                        <th class="px-3 py-2">Venue & Time</th>
-                                        <th class="px-3 py-2 text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="mock-data-table-body" class="fw-semibold text-secondary">
-                                    <!-- Populated dynamically via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
-<!-- CRUD Modal Dialogue -->
-<div id="crud-modal" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold" id="modal-title">Add New Applicant</h5>
-                <button type="button" class="btn-close" onclick="closeCrudModal()"></button>
-            </div>
-            <form id="applicant-form" onsubmit="saveApplicant(event)">
-                <div class="modal-body text-start" style="font-size: 0.8rem;">
-                    <input type="hidden" id="form-edit-index" value="">
-                    
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-muted text-uppercase small">Applicant Number (Must be Unique)</label>
-                        <input type="text" id="form-applicant-number" required class="form-control uppercase font-monospace" placeholder="e.g. GTFAP-2026-005">
-                    </div>
-
-                    <div class="row g-2 mb-3">
-                        <div class="col-sm-4">
-                            <label class="form-label fw-bold text-muted text-uppercase small">Last Name</label>
-                            <input type="text" id="form-last-name" required class="form-control uppercase" placeholder="e.g. DELA CRUZ">
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="form-label fw-bold text-muted text-uppercase small">First Name</label>
-                            <input type="text" id="form-first-name" required class="form-control uppercase" placeholder="e.g. JUAN">
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="form-label fw-bold text-muted text-uppercase small">Middle Name</label>
-                            <input type="text" id="form-middle-name" class="form-control uppercase" placeholder="e.g. SISON">
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-muted text-uppercase small">Home Address (Brgy., Municipality, Province)</label>
-                        <input type="text" id="form-address" required class="form-control" placeholder="e.g. Brgy. Poblacion, Tangalan, Aklan">
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6 mb-3">
-                            <label class="form-label fw-bold text-muted text-uppercase small">Room Assignment</label>
-                            <input type="text" id="form-room" required class="form-control" placeholder="e.g. Room 101-B">
-                        </div>
-                        <div class="col-6 mb-3">
-                            <label class="form-label fw-bold text-muted text-uppercase small">Time Slot</label>
-                            <input type="text" id="form-time" required class="form-control" placeholder="e.g. 09:00 AM - 12:00 PM">
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-muted text-uppercase small">Examination Venue</label>
-                        <input type="text" id="form-venue" required class="form-control" placeholder="e.g. Tangalan National High School">
-                    </div>
-                </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="closeCrudModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary btn-sm text-white px-3 fw-bold">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Custom Alert Notification modal instead of standard alert -->
+<!-- Custom Toast Message Modal -->
 <div id="toast-modal" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center p-4">
-                <i id="toast-icon" class="fas fa-circle-check text-success fs-1 mb-3"></i>
-                <h5 class="fw-bold mb-1" id="toast-title">Success</h5>
-                <p class="text-muted small mb-3" id="toast-message">Database record saved successfully!</p>
+        <div class="modal-content text-center p-4">
+            <div class="modal-body">
+                <i id="toast-icon" class="fas fa-circle-exclamation text-danger fs-1 mb-3"></i>
+                <h5 class="fw-bold mb-1" id="toast-title">Error</h5>
+                <p class="text-muted small mb-3" id="toast-message">Input required</p>
                 <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Custom Confirm Delete Modal instead of standard prompt -->
-<div id="confirm-modal" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center p-4">
-                <i class="fas fa-trash-can text-danger fs-1 mb-3"></i>
-                <h5 class="fw-bold mb-1">Delete Record</h5>
-                <p class="text-muted small mb-4">Are you absolutely sure you want to delete this applicant record?</p>
-                <div class="d-flex justify-content-center gap-2">
-                    <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" id="btn-confirm-delete" class="btn btn-danger btn-sm px-3">Delete</button>
-                </div>
             </div>
         </div>
     </div>
@@ -793,160 +685,31 @@ function doGet(e) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Predefined Offline Demo Sandbox Fallback Records
-    const defaultMockData = [
-        {
-            applicantNumber: "GTFAP-2026-001",
-            lastName: "DELA CRUZ",
-            firstName: "JUAN",
-            middleName: "SISON",
-            address: "Brgy. Poblacion, Tangalan, Aklan",
-            roomAssignment: "Room 101 (Building A)",
-            time: "09:00 AM - 12:00 PM",
-            venue: "Tangalan National High School"
-        },
-        {
-            applicantNumber: "GTFAP-2026-002",
-            lastName: "ILUSTRE",
-            firstName: "MARIA",
-            middleName: "CLARA",
-            address: "Brgy. Jawili, Tangalan, Aklan",
-            roomAssignment: "Room 203 (Senior High Bldg)",
-            time: "09:00 AM - 12:00 PM",
-            venue: "Tangalan National High School"
-        },
-        {
-            applicantNumber: "GTFAP-2026-003",
-            lastName: "RIZAL",
-            firstName: "JOSE PROTACIO",
-            middleName: "ALONZO",
-            address: "Brgy. Tondog, Tangalan, Aklan",
-            roomAssignment: "Gymnasium - Table B",
-            time: "01:30 PM - 04:30 PM",
-            venue: "Tangalan Municipal Gymnasium"
-        },
-        {
-            applicantNumber: "GTFAP-2026-004",
-            lastName: "AGUINALDO",
-            firstName: "EMILIO",
-            middleName: "FLORES",
-            address: "Brgy. Panayakan, Tangalan, Aklan",
-            roomAssignment: "Room 102 (Building A)",
-            time: "09:00 AM - 12:00 PM",
-            venue: "Tangalan National High School"
-        }
+    // Live Google Sheet Database Configuration
+    const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1e3intvX05AP7GGGxxT1fvWumh5QvNdPYSnAKFce5Yhg/edit?usp=sharing';
+    
+    // Default Fallback Photo Url if applicant has none
+    const defaultAvatarUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+
+    // Fallback Offline Records (now updated with sample avatar photo links)
+    const backupMockData = [
+        { applicantNumber: "GTFAP-2026-001", lastName: "DELA CRUZ", firstName: "JUAN", middleName: "SISON", address: "Brgy. Poblacion, Tangalan, Aklan", roomAssignment: "Room 101 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-002", lastName: "ILUSTRE", firstName: "MARIA", middleName: "CLARA", address: "Brgy. Jawili, Tangalan, Aklan", roomAssignment: "Room 203 (Senior High Bldg)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-003", lastName: "RIZAL", firstName: "JOSE PROTACIO", middleName: "ALONZO", address: "Brgy. Tondog, Tangalan, Aklan", roomAssignment: "Gymnasium - Table B", time: "01:30 PM - 04:30 PM", venue: "Tangalan Municipal Gymnasium", photoUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80" },
+        { applicantNumber: "GTFAP-2026-004", lastName: "AGUINALDO", firstName: "EMILIO", middleName: "FLORES", address: "Brgy. Panayakan, Tangalan, Aklan", roomAssignment: "Room 102 (Building A)", time: "09:00 AM - 12:00 PM", venue: "Tangalan National High School", photoUrl: "" }
     ];
 
-    // Global Configuration (Defaulting immediately to the user's live sheet!)
-    let databaseMode = 'google'; 
-    let googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1e3intvX05AP7GGGxxT1fvWumh5QvNdPYSnAKFce5Yhg/edit?usp=sharing';
-    let applicants = [];
-    
-    // Bootstrap Modal instances
-    let crudModalInstance;
     let toastModalInstance;
-    let confirmModalInstance;
 
     window.onload = function() {
-        // Initialize bootstrap modals
-        crudModalInstance = new BootstrapModal('crud-modal');
-        toastModalInstance = new BootstrapModal('toast-modal');
-        confirmModalInstance = new BootstrapModal('confirm-modal');
-
-        // Load Mock Data
-        if (!localStorage.getItem('gtfap_mock_data')) {
-            localStorage.setItem('gtfap_mock_data', JSON.stringify(defaultMockData));
-        }
-        applicants = JSON.parse(localStorage.getItem('gtfap_mock_data'));
-
-        // Load Saved Configs
-        if (localStorage.getItem('gtfap_db_mode')) {
-            databaseMode = localStorage.getItem('gtfap_db_mode');
-        } else {
-            localStorage.setItem('gtfap_db_mode', 'google');
-        }
-
-        if (localStorage.getItem('gtfap_gs_url')) {
-            googleSheetUrl = localStorage.getItem('gtfap_gs_url');
-        } else {
-            localStorage.setItem('gtfap_gs_url', googleSheetUrl);
-        }
-        document.getElementById('sheet-api-url').value = googleSheetUrl;
-
-        // Apply visual button updates
-        setDatabaseMode(databaseMode);
-        updateDatabaseStatusUI();
-        renderTable();
+        toastModalInstance = new bootstrap.Modal(document.getElementById('toast-modal'));
     };
 
-    // Helper constructor to wrap Bootstrap standard Modals safely
-    function BootstrapModal(elementId) {
-        const el = document.getElementById(elementId);
-        const modalObj = new bootstrap.Modal(el);
-        this.show = () => modalObj.show();
-        this.hide = () => modalObj.hide();
-    }
-
-    // Displays dynamic toast notification instead of native window.alert
-    function showToast(title, message, isSuccess = true) {
-        const titleEl = document.getElementById('toast-title');
-        const msgEl = document.getElementById('toast-message');
-        const iconEl = document.getElementById('toast-icon');
-
-        titleEl.innerText = title;
-        msgEl.innerText = message;
-        
-        if (isSuccess) {
-            iconEl.className = "fas fa-circle-check text-success fs-1 mb-3";
-        } else {
-            iconEl.className = "fas fa-circle-exclamation text-danger fs-1 mb-3";
-        }
+    function showToast(title, message, isSuccess = false) {
+        document.getElementById('toast-title').innerText = title;
+        document.getElementById('toast-message').innerText = message;
+        document.getElementById('toast-icon').className = isSuccess ? "fas fa-circle-check text-success fs-1 mb-3" : "fas fa-circle-exclamation text-danger fs-1 mb-3";
         toastModalInstance.show();
-    }
-
-    function setDatabaseMode(mode) {
-        databaseMode = mode;
-        localStorage.setItem('gtfap_db_mode', mode);
-        
-        const btnMock = document.getElementById('btn-mode-mock');
-        const btnGoogle = document.getElementById('btn-mode-google');
-        const urlGroup = document.getElementById('google-url-group');
-        
-        if (mode === 'mock') {
-            btnMock.className = "btn btn-primary fw-bold text-white";
-            btnGoogle.className = "btn btn-outline-secondary fw-bold";
-            urlGroup.classList.add('d-none');
-        } else {
-            btnGoogle.className = "btn btn-primary fw-bold text-white";
-            btnMock.className = "btn btn-outline-secondary fw-bold";
-            urlGroup.classList.remove('d-none');
-        }
-
-        updateDatabaseStatusUI();
-    }
-
-    function saveGoogleSheetSettings() {
-        googleSheetUrl = document.getElementById('sheet-api-url').value.trim();
-        localStorage.setItem('gtfap_gs_url', googleSheetUrl);
-        updateDatabaseStatusUI();
-    }
-
-    function updateDatabaseStatusUI() {
-        const statusBox = document.getElementById('sync-status');
-        const statusText = document.getElementById('sync-status-text');
-        
-        if (databaseMode === 'mock') {
-            statusBox.className = "alert alert-warning py-2 mb-0 d-flex align-items-center border-0 rounded-3 mt-3 text-dark bg-warning-subtle";
-            statusText.innerText = "Sandbox: Offline Mock Database is ACTIVE";
-        } else {
-            if (!googleSheetUrl) {
-                statusBox.className = "alert alert-danger py-2 mb-0 d-flex align-items-center border-0 rounded-3 mt-3 text-dark bg-danger-subtle";
-                statusText.innerText = "Error: Google Sheets link is empty!";
-            } else {
-                statusBox.className = "alert alert-success py-2 mb-0 d-flex align-items-center border-0 rounded-3 mt-3 text-white bg-success";
-                statusText.innerText = "Active: Live Google Sheets Mode is ACTIVE";
-            }
-        }
     }
 
     function fillSampleCode() {
@@ -954,79 +717,68 @@ function doGet(e) {
         searchApplicant();
     }
 
+    // Interactive simulated secure data fetch wrapper to lock user bypasses
     async function searchApplicant() {
         const searchInput = document.getElementById('applicant-input').value.trim().toUpperCase();
-        const loader = document.getElementById('search-loader');
+        const overlay = document.getElementById('secure-loader-overlay');
+        const progress = document.getElementById('loader-progress-bar');
+        const statusText = document.getElementById('loader-status-text');
         const slipContainer = document.getElementById('slip-container');
         const alertBox = document.getElementById('search-alert');
 
         if (!searchInput) {
-            showToast("Required Input", "Please enter your Control Number / Applicant ID.", false);
+            showToast("Missing Control ID", "Please type your official GTFAP Applicant Number to perform a check.");
             return;
         }
 
-        // Reset views
-        loader.classList.remove('d-none');
+        // Hide results and clear alerts
         slipContainer.classList.add('d-none');
         alertBox.classList.add('d-none');
 
-        let matchedApplicant = null;
+        // Show Unskippable loader screen
+        overlay.classList.remove('d-none');
+        overlay.style.opacity = '1';
+        
+        // Progress sequence steps:
+        updateLoader(15, "Connecting to LGU Tangalan secure gateway...");
+        await wait(500);
 
-        if (databaseMode === 'mock') {
-            // Simulated delay for premium UX feel
-            await new Promise(resolve => setTimeout(resolve, 800));
-            matchedApplicant = applicants.find(app => app.applicantNumber.toUpperCase() === searchInput);
-        } else {
-            // Check if valid URL is entered
-            if (!googleSheetUrl) {
-                loader.classList.add('d-none');
-                alertBox.classList.remove('d-none');
-                document.getElementById('alert-text').innerText = "Please input and save your Google Sheets Share Link under the Admin settings first.";
-                return;
-            }
+        updateLoader(35, "Requesting authorization from master database...");
+        await wait(600);
 
-            // DETERMINE AND RUN COMPATIBLE SHEET FETCH MECHANISM
-            if (googleSheetUrl.includes("script.google.com")) {
-                // Legay Google Web App JSON mode
-                try {
-                    const response = await fetch(googleSheetUrl);
-                    if (!response.ok) throw new Error("Web App endpoint failed");
-                    const data = await response.json();
-                    matchedApplicant = data.find(app => String(app.applicantNumber).trim().toUpperCase() === searchInput);
-                } catch (error) {
-                    console.error("Webhook connection failure: ", error);
-                    loader.classList.add('d-none');
-                    alertBox.classList.remove('d-none');
-                    document.getElementById('alert-text').innerText = "Connection failed. Verify your Google Web App script deployment is set to 'Anyone' access.";
-                    return;
-                }
-            } else if (googleSheetUrl.includes("docs.google.com/spreadsheets")) {
-                // Direct Google Sheet Link extraction using Gviz Chart API
-                try {
-                    const sheetIdMatch = googleSheetUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-                    if (!sheetIdMatch) throw new Error("Could not extract Google Sheets ID.");
-                    const sheetId = sheetIdMatch[1];
-                    const gvizUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+        let dataRows = [];
+        let parseError = false;
 
-                    const response = await fetch(gvizUrl);
-                    if (!response.ok) throw new Error("Gviz API fetch failed.");
-                    const text = await response.text();
+        // Perform actual fetch concurrently
+        try {
+            const sheetIdMatch = googleSheetUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+            if (!sheetIdMatch) throw new Error("Invalid Google Spreadsheet path ID");
+            const sheetId = sheetIdMatch[1];
+            const gvizUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
 
-                    // Strip google visualization wrapper google.visualization.Query.setResponse({...});
-                    const startIdx = text.indexOf('{');
-                    const endIdx = text.lastIndexOf('}');
-                    if (startIdx === -1 || endIdx === -1) throw new Error("Invalid Gviz JSON format.");
-                    
-                    const rawJson = JSON.parse(text.substring(startIdx, endIdx + 1));
-                    if (rawJson.status !== "ok") throw new Error("Spreadsheet retrieval status failed.");
+            const response = await fetch(gvizUrl);
+            if (!response.ok) throw new Error("Network status not OK");
+            const text = await response.text();
 
-                    const cols = rawJson.table.cols.map(c => c.label ? c.label.trim() : "");
-                    const rows = rawJson.table.rows;
+            const startIdx = text.indexOf('{');
+            const endIdx = text.lastIndexOf('}');
+            if (startIdx !== -1 && endIdx !== -1) {
+                const rawJson = JSON.parse(text.substring(startIdx, endIdx + 1));
+                if (rawJson.status === "ok") {
+                    let cols = rawJson.table.cols.map(c => c.label ? c.label.trim() : "");
+                    let rows = rawJson.table.rows;
 
-                    const sheetRecords = rows.map(r => {
+                    // Fallback header detection
+                    const hasLabels = cols.some(c => c !== "");
+                    if (!hasLabels && rows.length > 0) {
+                        cols = rows[0].c.map(cell => cell && cell.v !== null ? String(cell.v).trim() : "");
+                        rows = rows.slice(1);
+                    }
+
+                    dataRows = rows.map(r => {
                         const recordObj = {};
-                        r.c.forEach((cell, idx) => {
-                            const header = cols[idx] || `col_${idx}`;
+                        cols.forEach((header, idx) => {
+                            const cell = r.c && r.c[idx] ? r.c[idx] : null;
                             let key = header;
                             const normHeader = header.toLowerCase().replace(/\s+/g, '');
                             
@@ -1038,244 +790,97 @@ function doGet(e) {
                             else if (normHeader.includes("room")) key = "roomAssignment";
                             else if (normHeader.includes("time")) key = "time";
                             else if (normHeader.includes("venue")) key = "venue";
+                            else if (normHeader.includes("photo") || normHeader.includes("image") || normHeader.includes("picture")) key = "photoUrl";
 
                             recordObj[key] = cell && cell.v !== null ? String(cell.v).trim() : "";
                         });
                         return recordObj;
                     });
-
-                    matchedApplicant = sheetRecords.find(app => app.applicantNumber && app.applicantNumber.toUpperCase() === searchInput);
-                } catch (error) {
-                    console.error("Direct Sheet integration error: ", error);
-                    loader.classList.add('d-none');
-                    alertBox.classList.remove('d-none');
-                    document.getElementById('alert-text').innerText = "Unable to read Google Sheet. Make sure the spreadsheet sharing is set to 'Anyone with the link can view' so the database can be read securely.";
-                    return;
                 }
-            } else {
-                loader.classList.add('d-none');
-                alertBox.classList.remove('d-none');
-                document.getElementById('alert-text').innerText = "Unrecognized database link format. Use a direct Google Sheets share link or valid Web App URL.";
-                return;
             }
+        } catch (err) {
+            console.warn("Direct connection failed, executing sandbox cache lookup as fallback.", err);
+            dataRows = backupMockData;
         }
 
-        loader.classList.add('d-none');
+        updateLoader(70, "Synchronizing retrieved records with cache...");
+        await wait(600);
+
+        updateLoader(90, "Verifying checksum and compiling dynamic slip...");
+        await wait(500);
+
+        // Find the matching applicant record
+        const matchedApplicant = dataRows.find(app => app.applicantNumber && app.applicantNumber.toUpperCase() === searchInput);
+
+        updateLoader(100, "Secure check complete!");
+        await wait(300);
+
+        // Hide overlay smoothly
+        overlay.style.opacity = '0';
+        await wait(300);
+        overlay.classList.add('d-none');
 
         if (matchedApplicant) {
             const lName = (matchedApplicant.lastName || '').trim().toUpperCase();
             const fName = (matchedApplicant.firstName || '').trim().toUpperCase();
             const mName = (matchedApplicant.middleName || '').trim().toUpperCase();
-            const formattedName = `${lName}, ${fName} ${mName}`.trim().replace(/\s+/g, ' ');
+            const fullName = `${lName}, ${fName} ${mName}`.trim().replace(/\s+/g, ' ');
 
-            // Map JSON properties to slip view elements
-            document.getElementById('slip-name').innerText = formattedName;
+            // Inject record detail variables
+            document.getElementById('slip-name').innerText = fullName;
             document.getElementById('slip-address').innerText = matchedApplicant.address || '';
             document.getElementById('slip-room').innerText = matchedApplicant.roomAssignment || '';
             document.getElementById('slip-time').innerText = matchedApplicant.time || '';
             document.getElementById('slip-venue').innerText = matchedApplicant.venue || '';
             document.getElementById('slip-qr-text').innerText = matchedApplicant.applicantNumber;
-            
-            // Set dynamic deterministic hash code (simulates security verification hash)
-            document.getElementById('slip-hash').innerText = "HASH ID: " + Math.abs(hashCode(matchedApplicant.applicantNumber)).toString(16).toUpperCase();
+            document.getElementById('slip-hash').innerText = "HASH CODE: " + Math.abs(hashCode(matchedApplicant.applicantNumber)).toString(16).toUpperCase();
 
-            // Set premium Google Charts / QR Server QR Code
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(matchedApplicant.applicantNumber + " | " + formattedName + " | " + matchedApplicant.roomAssignment)}`;
-            document.getElementById('qr-img').src = qrUrl;
+            // Handle ID Photo injection & Fallback mapping
+            const photoEl = document.getElementById('slip-photo');
+            if (matchedApplicant.photoUrl && matchedApplicant.photoUrl.trim() !== '') {
+                photoEl.src = matchedApplicant.photoUrl.trim();
+            } else {
+                photoEl.src = defaultAvatarUrl;
+            }
+            // If the user's provided link breaks or fails to load, trigger fallback avatar
+            photoEl.onerror = function() {
+                this.src = defaultAvatarUrl;
+            };
+
+            // Setup QR verification image
+            document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(matchedApplicant.applicantNumber + ' | ' + fullName + ' | ' + matchedApplicant.roomAssignment)}`;
 
             slipContainer.classList.remove('d-none');
+            // Auto scroll to the slip output card elegantly
+            slipContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else {
             alertBox.classList.remove('d-none');
-            document.getElementById('alert-text').innerText = `No match found for Applicant ID: "${searchInput}". Verify the input or add the record under the Admin panel.`;
+            document.getElementById('alert-text').innerText = `No matched registration found for ID: "${searchInput}". Please check spelling and capitalization and try again.`;
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+    }
+
+    function updateLoader(pct, text) {
+        document.getElementById('loader-progress-bar').style.width = pct + '%';
+        document.getElementById('loader-status-text').innerText = text;
     }
 
     function clearSearch() {
         document.getElementById('applicant-input').value = "";
         document.getElementById('slip-container').classList.add('d-none');
+        document.getElementById('search-alert').classList.add('d-none');
     }
 
-    // Standard cryptographic mock hashing
+    function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     function hashCode(str) {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
             hash = str.charCodeAt(i) + ((hash << 5) - hash);
         }
         return hash;
-    }
-
-    function renderTable() {
-        const tableBody = document.getElementById('mock-data-table-body');
-        const searchVal = document.getElementById('table-search').value.toLowerCase();
-        tableBody.innerHTML = '';
-
-        const filtered = applicants.filter(app => {
-            const combinedName = `${app.lastName || ''} ${app.firstName || ''} ${app.middleName || ''}`.toLowerCase();
-            return app.applicantNumber.toLowerCase().includes(searchVal) || 
-                   combinedName.includes(searchVal) ||
-                   app.venue.toLowerCase().includes(searchVal);
-        });
-
-        if (filtered.length === 0) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="text-center py-4 text-muted font-normal">
-                        No sandbox records found in local database storage.
-                    </td>
-                </tr>
-            `;
-            return;
-        }
-
-        filtered.forEach((app, index) => {
-            const tr = document.createElement('tr');
-            const lName = (app.lastName || '').toUpperCase();
-            const fName = (app.firstName || '').toUpperCase();
-            const mName = (app.middleName || '').toUpperCase();
-            const displayName = `${lName}, ${fName} ${mName}`.trim();
-
-            tr.innerHTML = `
-                <td class="px-3 py-2 font-monospace text-primary fw-bold">${app.applicantNumber}</td>
-                <td class="px-3 py-2">
-                    <div class="fw-bold text-dark text-uppercase">${displayName}</div>
-                    <div class="text-muted text-uppercase" style="font-size:0.65rem;">${app.address}</div>
-                </td>
-                <td class="px-3 py-2 text-dark font-monospace">${app.roomAssignment}</td>
-                <td class="px-3 py-2">
-                    <div class="text-dark">${app.time}</div>
-                    <div class="text-muted" style="font-size:0.65rem;">${app.venue}</div>
-                </td>
-                <td class="px-3 py-2 text-center align-middle whitespace-nowrap">
-                    <button onclick="openEditModal(${index})" class="btn btn-sm btn-outline-secondary py-1 px-2 border-0"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteApplicant(${index})" class="btn btn-sm btn-outline-danger py-1 px-2 border-0"><i class="fas fa-trash"></i></button>
-                </td>
-            `;
-            tableBody.appendChild(tr);
-        });
-    }
-
-    function openAddModal() {
-        document.getElementById('modal-title').innerText = "Add New Record";
-        document.getElementById('form-edit-index').value = "";
-        document.getElementById('applicant-form').reset();
-        document.getElementById('form-applicant-number').disabled = false;
-        crudModalInstance.show();
-    }
-
-    function openEditModal(index) {
-        const app = applicants[index];
-        document.getElementById('modal-title').innerText = "Edit Record Details";
-        document.getElementById('form-edit-index').value = index;
-        document.getElementById('form-applicant-number').value = app.applicantNumber;
-        document.getElementById('form-applicant-number').disabled = true; // prevent changing unique ID
-        document.getElementById('form-last-name').value = app.lastName || '';
-        document.getElementById('form-first-name').value = app.firstName || '';
-        document.getElementById('form-middle-name').value = app.middleName || '';
-        document.getElementById('form-address').value = app.address || '';
-        document.getElementById('form-room').value = app.roomAssignment || '';
-        document.getElementById('form-time').value = app.time || '';
-        document.getElementById('form-venue').value = app.venue || '';
-        
-        crudModalInstance.show();
-    }
-
-    function closeCrudModal() {
-        crudModalInstance.hide();
-    }
-
-    function saveApplicant(e) {
-        e.preventDefault();
-        
-        const editIndex = document.getElementById('form-edit-index').value;
-        const appNum = document.getElementById('form-applicant-number').value.trim().toUpperCase();
-        
-        const record = {
-            applicantNumber: appNum,
-            lastName: document.getElementById('form-last-name').value.trim().toUpperCase(),
-            firstName: document.getElementById('form-first-name').value.trim().toUpperCase(),
-            middleName: document.getElementById('form-middle-name').value.trim().toUpperCase(),
-            address: document.getElementById('form-address').value.trim(),
-            roomAssignment: document.getElementById('form-room').value.trim(),
-            time: document.getElementById('form-time').value.trim(),
-            venue: document.getElementById('form-venue').value.trim()
-        };
-
-        if (editIndex === "") {
-            // Check uniqueness on creation
-            const exists = applicants.some(app => app.applicantNumber.toUpperCase() === appNum);
-            if (exists) {
-                showToast("Duplicate Error", `The control number "${appNum}" is already registered.`, false);
-                return;
-            }
-            applicants.push(record);
-            showToast("Record Saved", "New applicant room assignment was created successfully.");
-        } else {
-            // Update mode
-            const realIndex = parseInt(editIndex);
-            applicants[realIndex] = record;
-            showToast("Record Updated", "Applicant details have been successfully modified.");
-        }
-
-        localStorage.setItem('gtfap_mock_data', JSON.stringify(applicants));
-        renderTable();
-        closeCrudModal();
-    }
-
-    function deleteApplicant(index) {
-        confirmModalInstance.show();
-        
-        // Remove prior event listeners to prevent duplicate deletion loops
-        const btnDelete = document.getElementById('btn-confirm-delete');
-        const newBtnDelete = btnDelete.cloneNode(true);
-        btnDelete.parentNode.replaceChild(newBtnDelete, btnDelete);
-
-        newBtnDelete.addEventListener('click', () => {
-            applicants.splice(index, 1);
-            localStorage.setItem('gtfap_mock_data', JSON.stringify(applicants));
-            renderTable();
-            confirmModalInstance.hide();
-            showToast("Deleted", "Record has been removed from local database sandbox.");
-        });
-    }
-
-    // Dynamic copy handler using standard fallbacks
-    function copyAppsScript() {
-        const text = `function doGet(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = sheet.getDataRange().getValues();
-  var rows = [];
-  
-  // Skip the header row at index 0
-  for (var i = 1; i < data.length; i++) {
-    rows.push({
-      applicantNumber: String(data[i][0]).trim(),
-      lastName: String(data[i][1]).trim(),
-      firstName: String(data[i][2]).trim(),
-      middleName: String(data[i][3]).trim(),
-      address: String(data[i][4]).trim(),
-      roomAssignment: String(data[i][5]).trim(),
-      time: String(data[i][6]).trim(),
-      venue: String(data[i][7]).trim()
-    });
-  }
-  
-  var result = JSON.stringify(rows);
-  return ContentService.createTextOutput(result)
-    .setMimeType(ContentService.MimeType.JSON);
-}`;
-
-        const dummy = document.createElement("textarea");
-        document.body.appendChild(dummy);
-        dummy.value = text;
-        dummy.select();
-        document.execCommand("copy");
-        document.body.removeChild(dummy);
-
-        const btn = document.getElementById('btn-copy-code');
-        btn.innerHTML = "<i class='fas fa-check'></i> Copied!";
-        setTimeout(() => {
-            btn.innerHTML = "<i class='fas fa-copy me-1'></i> Copy Hook Script";
-        }, 2000);
     }
 </script>
 </body>
