@@ -82,7 +82,7 @@
             padding: 8px;
             border-radius: 50px;
             display: inline-flex;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.055);
             border: 1px solid rgba(0,0,0,0.08);
         }
 
@@ -283,18 +283,18 @@
             transition: width 0.4s ease;
         }
 
-        /* ID Photo Card Container */
+        /* ID Photo Card Container - Updated to be perfectly square and sharp */
         .id-photo-container {
             width: 110px;
             height: 110px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
+            border: 2px solid #1a1a1a; /* Clean dark-black solid border */
+            border-radius: 2px; /* Super-sharp corner look, authentic 2x2 cut */
             overflow: hidden;
             background-color: #f8f9fa;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         .id-photo-container img {
@@ -420,16 +420,14 @@
                         <label for="applicant-input" class="form-label fw-bold text-secondary text-uppercase small">Applicant Number / Control ID</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0"><i class="fas fa-fingerprint text-muted"></i></span>
-                            <input type="text" id="applicant-input" class="form-control form-control-lg bg-light border-start-0 uppercase font-monospace" placeholder="e.g. GTFAP-2026-001" onkeydown="if(event.key === 'Enter') searchApplicant()">
+                            <span class="input-group-text bg-light border-start-0 border-end-0 fw-bold font-monospace text-dark" style="font-size: 1rem; letter-spacing: 0.5px;">GTFAP-2026-</span>
+                            <input type="text" id="applicant-input" class="form-control form-control-lg bg-light border-start-0 uppercase font-monospace fw-bold" placeholder="001" style="font-size: 1.15rem; padding-left: 4px;" onkeydown="if(event.key === 'Enter') searchApplicant()">
                             <button class="btn btn-primary px-4 fw-bold text-white" type="button" onclick="searchApplicant()">
                                 <i class="fas fa-search me-1"></i> Check
                             </button>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-3 small text-muted">
                             <span>Press enter or click search</span>
-                            <button onclick="fillSampleCode()" class="btn btn-link btn-sm text-decoration-none p-0 fw-bold" style="color: var(--tangalan-blue);">
-                                <i class="fas fa-wand-magic-sparkles"></i> Use Demo ID
-                            </button>
                         </div>
                     </div>
 
@@ -473,15 +471,11 @@
                                     
                                     <!-- QR Code area -->
                                     <div class="col-md-4 text-center border-end d-flex flex-column align-items-center justify-content-center">
-                                        <div class="bg-light p-3 rounded-3 border mb-2 shadow-inner">
+                                        <div class="bg-light p-3 rounded-3 border mb-0 shadow-inner">
                                             <div class="bg-white p-2 border rounded-2" style="width:140px; height:140px;">
                                                 <img id="qr-img" src="" alt="QR" class="img-fluid w-100 h-100">
                                             </div>
                                             <p class="small text-muted font-monospace mt-2 mb-0" id="slip-qr-text">GTFAP-0000</p>
-                                        </div>
-                                        <div class="mt-2">
-                                            <p class="small text-muted uppercase font-monospace mb-0" style="font-size: 0.75rem;">SCHOLARSHIP ASSISTANCE</p>
-                                            <p class="fw-bold text-success mb-0" style="font-size: 0.9rem;">₱4,000 / Semester</p>
                                         </div>
                                     </div>
 
@@ -724,23 +718,40 @@
         toastModalInstance.show();
     }
 
-    function fillSampleCode() {
-        document.getElementById('applicant-input').value = "GTFAP-2026-001";
-        searchApplicant();
+    // Smart Google Drive Image URL Resolver & Regular image URL parser
+    function getDirectImageUrl(url) {
+        if (!url) return '';
+        url = url.trim();
+        
+        // Regex to parse and capture file ID from different formats of Google Drive sharing links
+        const driveRegex = /\/file\/d\/([a-zA-Z0-9-_]+)|id=([a-zA-Z0-9-_]+)/;
+        const match = url.match(driveRegex);
+        if (match) {
+            const fileId = match[1] || match[2];
+            // Returns standard Googleusercontent direct web asset render link
+            return `https://lh3.googleusercontent.com/d/${fileId}`;
+        }
+        return url;
     }
 
     // Interactive simulated secure data fetch wrapper to lock user bypasses
     async function searchApplicant() {
-        const searchInput = document.getElementById('applicant-input').value.trim().toUpperCase();
+        const suffix = document.getElementById('applicant-input').value.trim().toUpperCase();
         const overlay = document.getElementById('secure-loader-overlay');
         const progress = document.getElementById('loader-progress-bar');
         const statusText = document.getElementById('loader-status-text');
         const slipContainer = document.getElementById('slip-container');
         const alertBox = document.getElementById('search-alert');
 
-        if (!searchInput) {
-            showToast("Missing Control ID", "Please type your official GTFAP Applicant Number to perform a check.");
+        if (!suffix) {
+            showToast("Missing ID Number", "Please type your applicant number suffix (e.g. 001).");
             return;
+        }
+
+        // Intelligently parse the number, prepending prefix if user hasn't typed it
+        let searchInput = suffix;
+        if (!searchInput.startsWith("GTFAP-2026-")) {
+            searchInput = "GTFAP-2026-" + suffix;
         }
 
         // Hide results and clear alerts
@@ -802,7 +813,7 @@
                             else if (normHeader.includes("room")) key = "roomAssignment";
                             else if (normHeader.includes("time")) key = "time";
                             else if (normHeader.includes("venue")) key = "venue";
-                            else if (normHeader.includes("photo") || normHeader.includes("image") || normHeader.includes("picture")) key = "photoUrl";
+                            else if (normHeader.includes("photo") || normHeader.includes("image") || normHeader.includes("picture") || normHeader.includes("pic") || normHeader.includes("larawan") || normHeader.includes("2x2")) key = "photoUrl";
 
                             recordObj[key] = cell && cell.v !== null ? String(cell.v).trim() : "";
                         });
@@ -847,10 +858,12 @@
             document.getElementById('slip-qr-text').innerText = matchedApplicant.applicantNumber;
             document.getElementById('slip-hash').innerText = "HASH CODE: " + Math.abs(hashCode(matchedApplicant.applicantNumber)).toString(16).toUpperCase();
 
-            // Handle ID Photo injection & Fallback mapping
+            // Handle ID Photo injection & Fallback mapping using our resolver function
             const photoEl = document.getElementById('slip-photo');
-            if (matchedApplicant.photoUrl && matchedApplicant.photoUrl.trim() !== '') {
-                photoEl.src = matchedApplicant.photoUrl.trim();
+            const resolvedUrl = getDirectImageUrl(matchedApplicant.photoUrl);
+            
+            if (resolvedUrl && resolvedUrl.trim() !== '') {
+                photoEl.src = resolvedUrl;
             } else {
                 photoEl.src = defaultAvatarUrl;
             }
