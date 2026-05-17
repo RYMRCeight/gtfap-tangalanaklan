@@ -303,6 +303,12 @@
             object-fit: cover;
         }
 
+        /* Clean and precise print format styles */
+        @page {
+            size: portrait;
+            margin: 20mm; /* Saktong space sa gilid ng papel */
+        }
+
         @media print {
             body {
                 background: white !important;
@@ -312,27 +318,30 @@
                 display: none !important;
             }
             .slip-print-wrapper {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
                 padding: 0 !important;
-                margin: 0 !important;
                 box-shadow: none !important;
                 border: none !important;
+                position: relative !important;
             }
             .slip-outer {
                 border: 2px dashed #000 !important;
-                padding: 0 !important;
+                padding: 12px !important;
                 background: white !important;
+                margin: 0 auto !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
             }
             .slip-card {
                 border: 1px solid #000 !important;
                 box-shadow: none !important;
-                border-radius: 0 !important;
+                border-radius: 12px !important;
             }
             .slip-header {
                 background: #001f5c !important;
+                color: white !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -394,7 +403,9 @@
         
         <!-- Tab 1: Interactive Room Assignment Checker & Admittance Slip -->
         <div class="tab-pane fade show active" id="pills-checker" role="tabpanel" aria-labelledby="pills-checker-tab">
-            <div class="row justify-content-center">
+            
+            <!-- Information text rows - HIDDEN on print -->
+            <div class="row justify-content-center no-print">
                 <div class="col-md-8 text-center mb-4">
                     <span class="badge bg-primary px-3 py-2 uppercase tracking-wider mb-2">Live Verification Hub</span>
                     <h2 class="fw-bold text-dark">Find Your Exam Room Assignment</h2>
@@ -402,7 +413,8 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center mb-5">
+            <!-- Input controller card - HIDDEN on print -->
+            <div class="row justify-content-center mb-5 no-print">
                 <div class="col-md-6">
                     <div class="card border-0 shadow-sm p-4 rounded-3 bg-white">
                         <label for="applicant-input" class="form-label fw-bold text-secondary text-uppercase small">Applicant Number / Control ID</label>
@@ -875,6 +887,7 @@
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Standard cryptographic mock hashing
     function hashCode(str) {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
