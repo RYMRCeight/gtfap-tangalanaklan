@@ -514,7 +514,7 @@
                                         <div class="p-3 bg-light rounded-3 border-start border-warning border-3 text-muted" style="font-size: 0.75rem; line-height: 1.4;">
                                             <strong class="text-warning-dark text-uppercase d-block mb-1">Reminders:</strong>
                                             <ul class="mb-0 ps-3">
-                                                <li>Please bring the printed/screenshot of this slip and 1 Valid ID.</li>
+                                                <li>Please bring this slip and 1 valid ID.</li>
                                                 <li>Bring your own black ink ballpoint pens. Sharing is prohibited.</li>
                                                 <li>Arrive 30 minutes before your scheduled examination time block.</li>
                                             </ul>
@@ -531,7 +531,11 @@
                                         <p class="small text-primary font-monospace mb-0" id="slip-hash">HASH: F8B3E081</p>
                                     </div>
                                     <div class="col-sm-6 text-center text-sm-end">
+                                        <!-- Clean Digital Signature Indicator Block -->
                                         <div class="d-inline-block text-center">
+                                            <span class="text-uppercase font-monospace text-success fw-bold d-block mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                                <i class="fas fa-signature me-1"></i> DIGITALLY SIGNED BY:
+                                            </span>
                                             <div class="border-bottom pb-1 px-4" style="min-width: 180px;">
                                                 <span class="fw-bold text-dark uppercase small tracking-tight">REYMARC JASON T. TAMPOS</span>
                                             </div>
@@ -693,7 +697,7 @@
 <script>
     // Live Google Sheet Database Configuration
     const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1e3intvX05AP7GGGxxT1fvWumh5QvNdPYSnAKFce5Yhg/edit?usp=sharing';
-    
+
     // Default Fallback Photo Url if applicant has none
     const defaultAvatarUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
 
@@ -885,6 +889,7 @@
         }
     }
 
+    // Loader helper functions
     function updateLoader(pct, text) {
         document.getElementById('loader-progress-bar').style.width = pct + '%';
         document.getElementById('loader-status-text').innerText = text;
