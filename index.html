@@ -29,7 +29,7 @@
             flex-direction: column;
         }
 
-        /* Running Text / Marquee Style - Speed updated from 20s to 8s (Fast & Dynamic) */
+        /* Running Text / Marquee Style - Mabilis at Maaksyon (8s) */
         .deadline-marquee {
             background: var(--tangalan-yellow);
             color: #000;
@@ -50,7 +50,7 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* Official Gradient Header */
+        /* Opisyal na Gradient Header */
         .hero {
             background: linear-gradient(135deg, var(--tangalan-blue) 0%, #001f5c 100%);
             color: white;
@@ -60,7 +60,7 @@
             position: relative;
         }
 
-        /* Official Logo Styling */
+        /* Opisyal na Logo */
         .official-logo {
             width: 180px;
             height: 180px;
@@ -74,7 +74,7 @@
             object-fit: contain;
         }
 
-        /* Tab Navigation Controls style */
+        /* Estilo para sa Tab Navigation Controls */
         .portal-nav {
             margin-top: 25px;
             background: white;
@@ -106,7 +106,7 @@
             color: var(--tangalan-blue);
         }
 
-        /* Modern Card Styling */
+        /* Modernong Card Styling */
         .glass-card {
             background: #ffffff;
             border-radius: 15px;
@@ -130,7 +130,7 @@
             letter-spacing: 1px;
         }
 
-        /* The Assistance Highlight */
+        /* Estilo para sa Highlight ng Halaga ng Tulong */
         .money-card {
             background: linear-gradient(135deg, var(--tangalan-red) 0%, #7a0000 100%);
             color: white;
@@ -145,7 +145,7 @@
             color: var(--tangalan-gold);
         }
 
-        /* Admittance Slip Design */
+        /* Disenyo ng Admittance Slip */
         .slip-outer {
             border: 2px dashed #ccc;
             border-radius: 20px;
@@ -178,7 +178,7 @@
             pointer-events: none;
         }
 
-        /* List Icons */
+        /* Listahan ng mga Simbolo */
         .modern-list { list-style: none; padding-left: 0; }
         .modern-list li { padding-left: 30px; margin-bottom: 10px; position: relative; }
         .modern-list li::before { position: absolute; left: 0; font-size: 1.1rem; }
@@ -224,7 +224,7 @@
             border-left: 8px solid var(--tangalan-blue);
         }
 
-        /* Unskippable Premium Overlay style */
+        /* Unskippable Premium Loader Overlay */
         #secure-loader-overlay {
             position: fixed;
             top: 0;
@@ -282,12 +282,12 @@
             transition: width 0.4s ease;
         }
 
-        /* ID Photo Card Container - Updated to be perfectly square and sharp */
+        /* Sisidlan ng Larawan sa Admittance Slip (2x2 cut) */
         .id-photo-container {
             width: 110px;
             height: 110px;
-            border: 2px solid #1a1a1a; /* Clean dark-black solid border */
-            border-radius: 2px; /* Super-sharp corner look, authentic 2x2 cut */
+            border: 2px solid #1a1a1a;
+            border-radius: 2px;
             overflow: hidden;
             background-color: #f8f9fa;
             display: flex;
@@ -302,10 +302,10 @@
             object-fit: cover;
         }
 
-        /* Clean and precise print format styles */
+        /* Istilo para sa Pag-print ng Admittance Slip */
         @page {
             size: portrait;
-            margin: 20mm; /* Saktong space sa gilid ng papel */
+            margin: 20mm;
         }
 
         @media print {
@@ -455,7 +455,8 @@
                                 <div class="row align-items-center">
                                     <div class="col-sm-9">
                                         <span class="text-uppercase tracking-wider fw-semibold small text-warning font-monospace">Exam Admittance Slip</span>
-                                        <h3 class="fw-extrabold text-white mb-1">GTFAP SCHOLARSHIP PROGRAM</h3>
+                                        <!-- BINAGO: Pinalitan ang pamagat ng Government Tertiary Financial Assistance Program at nilapatan ng responsive font utilities -->
+                                        <h3 class="fw-extrabold text-white mb-1 fs-5 fs-sm-4">GOVERNMENT TERTIARY FINANCIAL ASSISTANCE PROGRAM</h3>
                                         <p class="small text-white opacity-75 mb-0">Municipality of Tangalan, Province of Aklan • S.Y. 2026-2027</p>
                                     </div>
                                     <div class="col-sm-3 text-sm-end mt-3 mt-sm-0">
@@ -544,7 +545,8 @@
                                             <div class="border-bottom pb-1 px-4" style="min-width: 180px;">
                                                 <span class="fw-bold text-dark uppercase small tracking-tight">REYMARC JASON T. TAMPOS</span>
                                             </div>
-                                            <p class="small text-muted mb-0 mt-1 uppercase" style="font-size: 0.65rem; font-weight: 600;">GTFAP Program Secretariat</p>
+                                            <!-- BINAGO: Pinalitan ang pagkakakilanlan ng GTFAP Secretariat mula sa GTFAP Program Secretariat -->
+                                            <p class="small text-muted mb-0 mt-1 uppercase" style="font-size: 0.65rem; font-weight: 600;">GTFAP Secretariat</p>
                                         </div>
                                     </div>
                                 </div>
@@ -726,7 +728,7 @@
         toastModalInstance.show();
     }
 
-    // Smart Google Drive Image URL Resolver & Regular image URL parser
+    // Resolba ng mga link para sa Google Drive Images
     function getDirectImageUrl(url) {
         if (!url) return '';
         url = url.trim();
@@ -740,7 +742,7 @@
         return url;
     }
 
-    // Interactive simulated secure data fetch wrapper to lock user bypasses
+    // Pangunahing lohika sa paghahanap
     async function searchApplicant() {
         const rawInput = document.getElementById('applicant-input').value.trim().toUpperCase();
         const overlay = document.getElementById('secure-loader-overlay');
@@ -751,43 +753,41 @@
         const selectorContainer = document.getElementById('selector-container');
 
         if (!rawInput) {
-            showToast("Input Required", "Please type your ID suffix (e.g. 001) or your Last Name.");
+            showToast("Kailangan ng Input", "Mangyaring ilagay ang iyong ID suffix (hal. 001) o ang iyong Apelyido.");
             return;
         }
 
-        // SECRET LOGIC: Determine if search is text-based (Last Name) or numeric/code suffix
         let isSecretLastNameSearch = false;
         let searchInput = rawInput;
 
-        // Check if the input contains pure letters and no digits (Signifies a Last Name search backdoor)
+        // Suriin kung apelyido ang ginamit sa paghahanap
         if (/^[A-Z\sÑñ\.]+$/.test(rawInput) && !rawInput.startsWith("GTFAP-")) {
             isSecretLastNameSearch = true;
         } else {
-            // Normal code search mapping fallback
             if (!searchInput.startsWith("GTFAP-2026-")) {
                 searchInput = "GTFAP-2026-" + rawInput;
             }
         }
 
-        // Hide results, clear old alerts, and clean duplicates selection list
+        // Itago ang mga resulta at i-clear ang mga lumang babala
         slipContainer.classList.add('d-none');
         alertBox.classList.add('d-none');
         selectorContainer.innerHTML = "";
         currentMatchedApplicants = [];
 
-        // Show Unskippable loader screen
+        // Ipakita ang loader overlay
         overlay.classList.remove('d-none');
         overlay.style.opacity = '1';
         
-        updateLoader(15, "Connecting to LGU Tangalan secure gateway...");
+        updateLoader(15, "Kumokonekta sa LGU Tangalan secure gateway...");
         await wait(500);
 
-        updateLoader(35, "Requesting authorization from master database...");
+        updateLoader(35, "Humihingi ng pahintulot sa master database...");
         await wait(600);
 
         let dataRows = [];
 
-        // Fetch direct rows from spreadsheet link
+        // Kumuha ng datos mula sa Google Spreadsheet
         try {
             const sheetIdMatch = googleSheetUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
             if (!sheetIdMatch) throw new Error("Invalid Google Spreadsheet path ID");
@@ -842,23 +842,23 @@
             dataRows = backupMockData;
         }
 
-        updateLoader(70, "Synchronizing retrieved records with cache...");
+        updateLoader(70, "Sinisabay ang nakuhang mga talaan sa cache...");
         await wait(600);
 
-        updateLoader(90, "Verifying checksum and compiling dynamic slip...");
+        updateLoader(90, "Sinusuri ang checksum at binubuo ang dynamic slip...");
         await wait(500);
 
         // EVALUATION LOGIC
         let matchedApplicant = null;
         if (isSecretLastNameSearch) {
-            // Kumuha ng LAHAT ng kapareho ang apelyido gamit ang .filter()
+            // Salain ang lahat ng may kaparehong apelyido gamit ang .filter()
             currentMatchedApplicants = dataRows.filter(app => app.lastName && app.lastName.trim().toUpperCase() === searchInput);
             
             if (currentMatchedApplicants.length === 1) {
                 matchedApplicant = currentMatchedApplicants[0];
             } else if (currentMatchedApplicants.length > 1) {
-                // Kung may higit sa isa, ipakita ang dropdown selection sa screen
-                updateLoader(100, "Multiple records found!");
+                // Ipakita ang dropdown selector kung may higit sa isa
+                updateLoader(100, "May nakitang higit sa isang talaan!");
                 await wait(300);
                 
                 overlay.style.opacity = '0';
@@ -866,14 +866,14 @@
                 overlay.classList.add('d-none');
 
                 showNameSelectionDropdown(currentMatchedApplicants);
-                return; // Huminto para hintayin ang input mula sa user selection list
+                return;
             }
         } else {
-            // Control ID search (Ito ay unique kaya nananatiling strict .find())
+            // Control ID search (Strict .find() dahil ito ay unique)
             matchedApplicant = dataRows.find(app => app.applicantNumber && app.applicantNumber.toUpperCase() === searchInput);
         }
 
-        updateLoader(100, "Secure check complete!");
+        updateLoader(100, "Kumpleto na ang pagsusuri!");
         await wait(300);
 
         overlay.style.opacity = '0';
@@ -884,15 +884,15 @@
             displayApplicantSlip(matchedApplicant);
         } else {
             alertBox.classList.remove('d-none');
-            document.getElementById('alert-text').innerText = `No matched registration found for input: "${rawInput}". Please check spelling and capitalization and try again.`;
+            document.getElementById('alert-text').innerText = `Walang nahanap na rehistro para sa: "${rawInput}". Pakisuri ang baybay at capitalization at subukan muli.`;
             alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
 
-    // Bagong helper function para magpakita ng listahan ng mga kaparehong apelyido
+    // Function para sa dropdown/listahan ng magkakaparehong apelyido
     function showNameSelectionDropdown(applicants) {
         const selectorContainer = document.getElementById('selector-container');
-        selectorContainer.innerHTML = ""; // Siguraduhing malinis ang container
+        selectorContainer.innerHTML = "";
 
         const colDiv = document.createElement('div');
         colDiv.className = "col-md-8";
@@ -900,7 +900,7 @@
         let listHtml = `
             <div class="card border-0 shadow-sm p-4 rounded-3 bg-white text-start">
                 <h5 class="fw-bold text-dark mb-2">
-                    <i class="fas fa-users text-primary me-2"></i> Multiple Records Found
+                    <i class="fas fa-users text-primary me-2"></i> Maraming Talaang Nahanap
                 </h5>
                 <p class="text-muted small mb-3">
                     Mayroong higit sa isang aplikante na may kaparehong apelyido. Mangyaring piliin ang iyong pangalan sa ibaba upang makita ang iyong Admittance Slip:
@@ -937,17 +937,16 @@
         selectorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // Kapag pinindot ang partikular na pangalan sa dropdown list
+    // Kapag pinindot ang partikular na pangalan sa listahan
     function selectApplicantFromList(index) {
         const matchedApplicant = currentMatchedApplicants[index];
         if (matchedApplicant) {
             displayApplicantSlip(matchedApplicant);
-            // Tanggalin ang pagpipilian dahil nakapili na
             document.getElementById('selector-container').innerHTML = "";
         }
     }
 
-    // Function na maglo-load ng slip sa UI mula sa napiling aplikante
+    // Pagpapasa at pagpapakita ng datos sa slip
     function displayApplicantSlip(matchedApplicant) {
         const slipContainer = document.getElementById('slip-container');
         const lName = (matchedApplicant.lastName || '').trim().toUpperCase();
@@ -955,22 +954,22 @@
         const mName = (matchedApplicant.middleName || '').trim().toUpperCase();
         const fullName = `${lName}, ${fName} ${mName}`.trim().replace(/\s+/g, ' ');
 
-        // Inject record data
+        // Ipasok ang impormasyon
         document.getElementById('slip-name').innerText = fullName;
         document.getElementById('slip-address').innerText = matchedApplicant.address || '';
         document.getElementById('slip-qr-text').innerText = matchedApplicant.applicantNumber;
         document.getElementById('slip-hash').innerText = "HASH CODE: " + Math.abs(hashCode(matchedApplicant.applicantNumber)).toString(16).toUpperCase();
 
-        // Set QR structure
+        // I-set ang QR Code
         document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(matchedApplicant.applicantNumber + ' | ' + fullName + ' | ' + (matchedApplicant.roomAssignment || 'N/A'))}`;
 
-        // Inject avatar images
+        // I-set ang Larawan
         const photoEl = document.getElementById('slip-photo');
         const resolvedUrl = getDirectImageUrl(matchedApplicant.photoUrl);
         photoEl.src = resolvedUrl || defaultAvatarUrl;
         photoEl.onerror = function() { this.src = defaultAvatarUrl; };
 
-        // Dynamic evaluation layout configurations
+        // Pagsasaayos ng Layout batay sa Status
         const rawStatus = (matchedApplicant.status || '').trim().toLowerCase();
         const remarks = (matchedApplicant.remarks || '').trim();
         const badgeEl = document.getElementById('slip-status-badge');
@@ -1018,7 +1017,7 @@
         document.getElementById('applicant-input').value = "";
         document.getElementById('slip-container').classList.add('d-none');
         document.getElementById('search-alert').classList.add('d-none');
-        document.getElementById('selector-container').innerHTML = ""; // Burahin ang selection dropdown list
+        document.getElementById('selector-container').innerHTML = "";
         currentMatchedApplicants = [];
     }
 
