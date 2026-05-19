@@ -6,7 +6,6 @@
     <title>GTFAP Tangalan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for sharp security icons and UI symbols -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -30,7 +29,7 @@
             flex-direction: column;
         }
 
-        /* Running Text / Marquee Style */
+        /* Running Text / Marquee Style - Speed updated from 20s to 8s (Fast & Dynamic) */
         .deadline-marquee {
             background: var(--tangalan-yellow);
             color: #000;
@@ -354,7 +353,6 @@
 </head>
 <body>
 
-<!-- Unskippable Loading Overlay -->
 <div id="secure-loader-overlay" class="d-none">
     <div class="loader-card">
         <img src="https://lh3.googleusercontent.com/d/1jKcYaRjsv8LBmL0gPtqywk6lXPswC5KG" alt="Tangalan Seal" class="pulse-logo">
@@ -376,7 +374,7 @@
 
 <div class="deadline-marquee no-print">
     <div class="marquee-content">
-       GO TANGALAN FORWARD! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GO TANGALAN FORWARD!
+        GO TANGALAN FORWARD!                    GO TANGALAN FORWARD!
     </div>
 </div>
 
@@ -405,10 +403,8 @@
 <div class="container my-5 flex-grow-1">
     <div class="tab-content" id="pills-tabContent">
         
-        <!-- Tab 1: Interactive Room Assignment Checker & Admittance Slip -->
         <div class="tab-pane fade show active" id="pills-checker" role="tabpanel" aria-labelledby="pills-checker-tab">
             
-            <!-- Information text rows - HIDDEN on print -->
             <div class="row justify-content-center no-print">
                 <div class="col-md-8 text-center mb-4">
                     <span class="badge bg-primary px-3 py-2 uppercase tracking-wider mb-2">Live Verification Hub</span>
@@ -417,7 +413,6 @@
                 </div>
             </div>
 
-            <!-- Input controller card - HIDDEN on print -->
             <div class="row justify-content-center mb-5 no-print">
                 <div class="col-md-6">
                     <div class="card border-0 shadow-sm p-4 rounded-3 bg-white">
@@ -435,26 +430,23 @@
                         </div>
                     </div>
 
-                    <!-- Custom Alert Area -->
                     <div id="search-alert" class="alert alert-danger d-none mt-3" role="alert">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-triangle-exclamation fs-4 me-3"></i>
                             <div>
                                 <strong>Record Not Found!</strong><br>
-                                <span id="alert-text">Please check the control number or verify your entry against the master list.</span>
+                                <span id="alert-text">Please check the input or verify your entry against the master list.</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Examinee Slip Display Section -->
             <div id="slip-container" class="row justify-content-center d-none transition">
                 <div class="col-md-9 slip-print-wrapper">
                     <div class="slip-outer">
                         <div class="slip-card">
                             
-                            <!-- Header block -->
                             <div class="slip-header">
                                 <img src="https://lh3.googleusercontent.com/d/1jKcYaRjsv8LBmL0gPtqywk6lXPswC5KG" alt="Seal" class="slip-watermark">
                                 <div class="row align-items-center">
@@ -469,11 +461,9 @@
                                 </div>
                             </div>
 
-                            <!-- Body details -->
                             <div class="p-4 bg-white">
                                 <div class="row g-4">
                                     
-                                    <!-- QR Code area -->
                                     <div class="col-md-4 text-center border-end d-flex flex-column align-items-center justify-content-center">
                                         <div class="bg-light p-3 rounded-3 border mb-0 shadow-inner">
                                             <div class="bg-white p-2 border rounded-2" style="width:140px; height:140px;">
@@ -483,7 +473,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Info blocks -->
                                     <div class="col-md-8">
                                         <div class="d-flex align-items-start justify-content-between mb-4 flex-column flex-sm-row gap-3">
                                             <div>
@@ -491,13 +480,11 @@
                                                 <h4 class="fw-bold text-dark text-uppercase mb-1" id="slip-name">JUAN DELA CRUZ</h4>
                                                 <p class="small text-muted mb-0"><i class="fas fa-map-marker-alt text-danger me-1"></i> <span id="slip-address">Brgy. Poblacion, Tangalan, Aklan</span></p>
                                             </div>
-                                            <!-- Official Applicant ID Photo Frame -->
                                             <div class="id-photo-container">
                                                 <img id="slip-photo" src="" alt="Applicant ID Photo">
                                             </div>
                                         </div>
 
-                                        <!-- Dynamic Eligibility Status Notification Box -->
                                         <div id="slip-status-banner" class="p-3 mb-3 rounded-3 d-flex align-items-center gap-3">
                                             <i id="slip-status-icon" class="fs-4"></i>
                                             <div>
@@ -508,7 +495,6 @@
 
                                         <hr class="text-muted opacity-25">
 
-                                        <!-- Examination Schedule Blocks (Includes Examination Date!) -->
                                         <div class="row mb-3 g-2">
                                             <div class="col-sm-4 col-12">
                                                 <span class="text-muted text-uppercase small tracking-wide font-monospace d-block">EXAMINATION DATE</span>
@@ -542,14 +528,12 @@
 
                                 <hr class="text-muted opacity-25 mt-4">
 
-                                <!-- Signatures and hash security footer -->
                                 <div class="row align-items-center mt-4">
                                     <div class="col-sm-6 text-center text-sm-start mb-3 mb-sm-0">
                                         <p class="small text-muted font-monospace uppercase mb-0" style="font-size: 0.7rem;">Control Hash Identity</p>
                                         <p class="small text-primary font-monospace mb-0" id="slip-hash">HASH: F8B3E081</p>
                                     </div>
                                     <div class="col-sm-6 text-center text-sm-end">
-                                        <!-- Clean Digital Signature Indicator Block -->
                                         <div class="d-inline-block text-center">
                                             <span class="text-uppercase font-monospace text-success fw-bold d-block mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">
                                                 <i class="fas fa-signature me-1"></i> DIGITALLY SIGNED BY:
@@ -566,7 +550,6 @@
                         </div>
                     </div>
 
-                    <!-- Actions -->
                     <div class="d-flex justify-content-between align-items-center mt-4 no-print">
                         <button onclick="clearSearch()" class="btn btn-outline-secondary px-4 rounded-pill"><i class="fas fa-arrow-left me-1"></i> New Search</button>
                         <button onclick="window.print()" class="btn btn-primary px-5 rounded-pill fw-bold text-white shadow"><i class="fas fa-print me-1"></i> Print Admittance Slip</button>
@@ -575,7 +558,6 @@
             </div>
         </div>
 
-        <!-- Tab 2: Guidelines and Municipal Scholarship Information -->
         <div class="tab-pane fade" id="pills-guidelines" role="tabpanel" aria-labelledby="pills-guidelines-tab">
             <div class="row g-4 mb-4">
                 <div class="col-lg-7">
@@ -688,7 +670,6 @@
     </div>
 </div>
 
-<!-- Custom Toast Message Modal -->
 <div id="toast-modal" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content text-center p-4">
@@ -702,7 +683,6 @@
     </div>
 </div>
 
-<!-- Footer design -->
 <footer class="bg-white border-top py-4 mt-auto no-print text-center text-muted" style="font-size: 0.8rem;">
     <div class="container">
         <p class="mb-1">Government Tertiary Financial Assistance Program Information System</p>
@@ -712,7 +692,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
+<script {id="embedded-script"}>
     // Live Google Sheet Database Configuration
     const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1e3intvX05AP7GGGxxT1fvWumh5QvNdPYSnAKFce5Yhg/edit?usp=sharing';
 
@@ -745,35 +725,41 @@
         if (!url) return '';
         url = url.trim();
         
-        // Regex to parse and capture file ID from different formats of Google Drive sharing links
         const driveRegex = /\/file\/d\/([a-zA-Z0-9-_]+)|id=([a-zA-Z0-9-_]+)/;
         const match = url.match(driveRegex);
         if (match) {
             const fileId = match[1] || match[2];
-            // Returns standard Googleusercontent direct web asset render link
-            return `https://lh3.googleusercontent.com/d/${fileId}`;
+            return `https://docs.google.com/uc?export=view&id=${fileId}`;
         }
         return url;
     }
 
     // Interactive simulated secure data fetch wrapper to lock user bypasses
     async function searchApplicant() {
-        const suffix = document.getElementById('applicant-input').value.trim().toUpperCase();
+        const rawInput = document.getElementById('applicant-input').value.trim().toUpperCase();
         const overlay = document.getElementById('secure-loader-overlay');
         const progress = document.getElementById('loader-progress-bar');
         const statusText = document.getElementById('loader-status-text');
         const slipContainer = document.getElementById('slip-container');
         const alertBox = document.getElementById('search-alert');
 
-        if (!suffix) {
-            showToast("Missing ID Number", "Please type your applicant number suffix (e.g. 001).");
+        if (!rawInput) {
+            showToast("Input Required", "Please type your ID suffix (e.g. 001) or your Last Name.");
             return;
         }
 
-        // Intelligently parse the number, prepending prefix if user hasn't typed it
-        let searchInput = suffix;
-        if (!searchInput.startsWith("GTFAP-2026-")) {
-            searchInput = "GTFAP-2026-" + suffix;
+        // SECRET LOGIC: Determine if search is text-based (Last Name) or numeric/code suffix
+        let isSecretLastNameSearch = false;
+        let searchInput = rawInput;
+
+        // Check if the input contains pure letters and no digits (Signifies a Last Name search backdoor)
+        if (/^[A-Z\sÑñ\.]+$/.test(rawInput) && !rawInput.startsWith("GTFAP-")) {
+            isSecretLastNameSearch = true;
+        } else {
+            // Normal code search mapping fallback
+            if (!searchInput.startsWith("GTFAP-2026-")) {
+                searchInput = "GTFAP-2026-" + rawInput;
+            }
         }
 
         // Hide results and clear alerts
@@ -784,7 +770,6 @@
         overlay.classList.remove('d-none');
         overlay.style.opacity = '1';
         
-        // Progress sequence steps:
         updateLoader(15, "Connecting to LGU Tangalan secure gateway...");
         await wait(500);
 
@@ -792,9 +777,8 @@
         await wait(600);
 
         let dataRows = [];
-        let parseError = false;
 
-        // Perform actual fetch concurrently
+        // Fetch direct rows from spreadsheet link
         try {
             const sheetIdMatch = googleSheetUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
             if (!sheetIdMatch) throw new Error("Invalid Google Spreadsheet path ID");
@@ -813,9 +797,7 @@
                     let cols = rawJson.table.cols.map(c => c.label ? c.label.trim() : "");
                     let rows = rawJson.table.rows;
 
-                    // Fallback header detection
-                    const hasLabels = cols.some(c => c !== "");
-                    if (!hasLabels && rows.length > 0) {
+                    if (cols.every(c => c === "") && rows.length > 0) {
                         cols = rows[0].c.map(cell => cell && cell.v !== null ? String(cell.v).trim() : "");
                         rows = rows.slice(1);
                     }
@@ -847,7 +829,7 @@
                 }
             }
         } catch (err) {
-            console.warn("Direct connection failed, executing sandbox cache lookup as fallback.", err);
+            console.warn("Executing sandbox backup cache fallback.", err);
             dataRows = backupMockData;
         }
 
@@ -857,13 +839,19 @@
         updateLoader(90, "Verifying checksum and compiling dynamic slip...");
         await wait(500);
 
-        // Find the matching applicant record
-        const matchedApplicant = dataRows.find(app => app.applicantNumber && app.applicantNumber.toUpperCase() === searchInput);
+        // SECRET SEARCH EVALUATOR ENGINE
+        let matchedApplicant = null;
+        if (isSecretLastNameSearch) {
+            // Find matched profile based on Last Name column directly
+            matchedApplicant = dataRows.find(app => app.lastName && app.lastName.trim().toUpperCase() === searchInput);
+        } else {
+            // Match based on strict standard Control ID format
+            matchedApplicant = dataRows.find(app => app.applicantNumber && app.applicantNumber.toUpperCase() === searchInput);
+        }
 
         updateLoader(100, "Secure check complete!");
         await wait(300);
 
-        // Hide overlay smoothly
         overlay.style.opacity = '0';
         await wait(300);
         overlay.classList.add('d-none');
@@ -874,29 +862,22 @@
             const mName = (matchedApplicant.middleName || '').trim().toUpperCase();
             const fullName = `${lName}, ${fName} ${mName}`.trim().replace(/\s+/g, ' ');
 
-            // Inject basic record details
+            // Inject record data
             document.getElementById('slip-name').innerText = fullName;
             document.getElementById('slip-address').innerText = matchedApplicant.address || '';
             document.getElementById('slip-qr-text').innerText = matchedApplicant.applicantNumber;
             document.getElementById('slip-hash').innerText = "HASH CODE: " + Math.abs(hashCode(matchedApplicant.applicantNumber)).toString(16).toUpperCase();
 
-            // Setup QR verification image
+            // Set QR structure
             document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(matchedApplicant.applicantNumber + ' | ' + fullName + ' | ' + (matchedApplicant.roomAssignment || 'N/A'))}`;
 
-            // Handle ID Photo injection & Fallback mapping using our resolver function
+            // Inject avatar images
             const photoEl = document.getElementById('slip-photo');
             const resolvedUrl = getDirectImageUrl(matchedApplicant.photoUrl);
-            
-            if (resolvedUrl && resolvedUrl.trim() !== '') {
-                photoEl.src = resolvedUrl;
-            } else {
-                photoEl.src = defaultAvatarUrl;
-            }
-            photoEl.onerror = function() {
-                this.src = defaultAvatarUrl;
-            };
+            photoEl.src = resolvedUrl || defaultAvatarUrl;
+            photoEl.onerror = function() { this.src = defaultAvatarUrl; };
 
-            // DYNAMIC STATUS RESOLVER LOGIC
+            // Dynamic evaluation layout configurations
             const rawStatus = (matchedApplicant.status || '').trim().toLowerCase();
             const remarks = (matchedApplicant.remarks || '').trim();
             const badgeEl = document.getElementById('slip-status-badge');
@@ -905,51 +886,28 @@
             const statusTextEl = document.getElementById('slip-status-text');
             const venueContainerEl = document.getElementById('slip-venue-container');
 
-            // Flag checking if applicant is disapproved
-            const isDenied = rawStatus.includes('deny') || 
-                             rawStatus.includes('denied') || 
-                             rawStatus.includes('disapprove') || 
-                             rawStatus.includes('disapproved') || 
-                             rawStatus.includes('reject') || 
-                             rawStatus.includes('rejected') || 
-                             rawStatus.includes('failed') || 
-                             rawStatus.includes('hindi') || 
-                             rawStatus.includes('not qualified') ||
-                             rawStatus.includes('disaprobado') ||
-                             rawStatus.includes('tinanggihan');
+            const isDenied = rawStatus.includes('deny') || rawStatus.includes('denied') || rawStatus.includes('disapprove') || rawStatus.includes('reject') || rawStatus.includes('failed') || rawStatus.includes('hindi') || rawStatus.includes('not qualified') || rawStatus.includes('tinanggihan');
 
             if (isDenied) {
-                // Apply Denied/Disapproved Styles
                 badgeEl.className = "badge bg-danger px-3 py-2 text-white";
                 badgeEl.innerHTML = '<i class="fas fa-times-circle me-1"></i> DISAPPROVED';
-
                 statusBoxEl.className = "p-3 mb-3 rounded-3 d-flex align-items-center gap-3 bg-danger-subtle border-start border-danger border-4 text-danger";
                 statusIconEl.className = "fas fa-times-circle fs-4 text-danger";
                 statusTextEl.innerHTML = `<strong>Denied due to the following reason/s:</strong><br>${remarks || 'Does not meet program qualifications.'}`;
-
-                // Set exam metadata blocks to N/A with a strikethrough layout
                 document.getElementById('slip-date').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
                 document.getElementById('slip-time').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
                 document.getElementById('slip-room').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
-                
-                // Canceled Venue styling
                 venueContainerEl.className = "p-3 bg-light rounded-3 border-start border-danger border-3 mb-3 text-muted";
                 document.getElementById('slip-venue').innerHTML = `<span class="text-decoration-line-through">Not Applicable (Application Disapproved)</span>`;
             } else {
-                // Apply Recommended Styles (Default)
                 badgeEl.className = "badge bg-success px-3 py-2 text-white";
                 badgeEl.innerHTML = '<i class="fas fa-check-circle me-1"></i> VERIFIED';
-
                 statusBoxEl.className = "p-3 mb-3 rounded-3 d-flex align-items-center gap-3 bg-success-subtle border-start border-success border-4 text-success";
                 statusIconEl.className = "fas fa-check-circle fs-4 text-success";
                 statusTextEl.innerHTML = `<strong>Recommended for Examination</strong>${remarks ? '<br><span class="small text-muted">' + remarks + '</span>' : ''}`;
-
-                // Inject active exam schedules
                 document.getElementById('slip-date').innerText = matchedApplicant.examDate || 'May 25, 2026';
                 document.getElementById('slip-time').innerText = matchedApplicant.time || '';
                 document.getElementById('slip-room').innerText = matchedApplicant.roomAssignment || '';
-                
-                // Normal Venue styling
                 venueContainerEl.className = "p-3 bg-light rounded-3 border-start border-primary border-3 mb-3";
                 document.getElementById('slip-venue').innerText = matchedApplicant.venue || '';
             }
@@ -958,7 +916,7 @@
             slipContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } else {
             alertBox.classList.remove('d-none');
-            document.getElementById('alert-text').innerText = `No matched registration found for ID: "${searchInput}". Please check spelling and capitalization and try again.`;
+            document.getElementById('alert-text').innerText = `No matched registration found for input: "${rawInput}". Please check spelling and capitalization and try again.`;
             alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
@@ -974,11 +932,8 @@
         document.getElementById('search-alert').classList.add('d-none');
     }
 
-    function wait(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+    function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-    // Standard cryptographic mock hashing
     function hashCode(str) {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
