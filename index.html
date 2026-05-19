@@ -313,7 +313,7 @@
                 background: white !important;
                 color: black !important;
             }
-            .no-print, header, .deadline-marquee, .hero, .official-logo, .portal-nav, footer {
+            .no-print, header, .deadline-marquee, .hero, .official-logo, .portal-nav, footer, #selector-container {
                 display: none !important;
             }
             .slip-print-wrapper {
@@ -374,7 +374,7 @@
 
 <div class="deadline-marquee no-print">
     <div class="marquee-content">
-        GO TANGALAN FORWARD!                    GO TANGALAN FORWARD!
+        GO TANGALAN FORWARD! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GO TANGALAN FORWARD!
     </div>
 </div>
 
@@ -441,6 +441,9 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Bagong lalagyan ng listahan ng mga kaparehong apelyido (Dropdown Selector) -->
+            <div id="selector-container" class="row justify-content-center mb-4 no-print"></div>
 
             <div id="slip-container" class="row justify-content-center d-none transition">
                 <div class="col-md-9 slip-print-wrapper">
@@ -692,12 +695,15 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script {id="embedded-script"}>
+<script id="embedded-script">
     // Live Google Sheet Database Configuration
     const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1e3intvX05AP7GGGxxT1fvWumh5QvNdPYSnAKFce5Yhg/edit?usp=sharing';
 
     // Default Fallback Photo Url if applicant has none
     const defaultAvatarUrl = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+
+    // Global variable para hawakan ang listahan ng mga kaparehong apelyido
+    let currentMatchedApplicants = [];
 
     // Fallback Offline Records (updated with status and remarks for testing)
     const backupMockData = [
@@ -742,6 +748,7 @@
         const statusText = document.getElementById('loader-status-text');
         const slipContainer = document.getElementById('slip-container');
         const alertBox = document.getElementById('search-alert');
+        const selectorContainer = document.getElementById('selector-container');
 
         if (!rawInput) {
             showToast("Input Required", "Please type your ID suffix (e.g. 001) or your Last Name.");
@@ -762,9 +769,11 @@
             }
         }
 
-        // Hide results and clear alerts
+        // Hide results, clear old alerts, and clean duplicates selection list
         slipContainer.classList.add('d-none');
         alertBox.classList.add('d-none');
+        selectorContainer.innerHTML = "";
+        currentMatchedApplicants = [];
 
         // Show Unskippable loader screen
         overlay.classList.remove('d-none');
@@ -839,13 +848,28 @@
         updateLoader(90, "Verifying checksum and compiling dynamic slip...");
         await wait(500);
 
-        // SECRET SEARCH EVALUATOR ENGINE
+        // EVALUATION LOGIC
         let matchedApplicant = null;
         if (isSecretLastNameSearch) {
-            // Find matched profile based on Last Name column directly
-            matchedApplicant = dataRows.find(app => app.lastName && app.lastName.trim().toUpperCase() === searchInput);
+            // Kumuha ng LAHAT ng kapareho ang apelyido gamit ang .filter()
+            currentMatchedApplicants = dataRows.filter(app => app.lastName && app.lastName.trim().toUpperCase() === searchInput);
+            
+            if (currentMatchedApplicants.length === 1) {
+                matchedApplicant = currentMatchedApplicants[0];
+            } else if (currentMatchedApplicants.length > 1) {
+                // Kung may higit sa isa, ipakita ang dropdown selection sa screen
+                updateLoader(100, "Multiple records found!");
+                await wait(300);
+                
+                overlay.style.opacity = '0';
+                await wait(300);
+                overlay.classList.add('d-none');
+
+                showNameSelectionDropdown(currentMatchedApplicants);
+                return; // Huminto para hintayin ang input mula sa user selection list
+            }
         } else {
-            // Match based on strict standard Control ID format
+            // Control ID search (Ito ay unique kaya nananatiling strict .find())
             matchedApplicant = dataRows.find(app => app.applicantNumber && app.applicantNumber.toUpperCase() === searchInput);
         }
 
@@ -857,68 +881,132 @@
         overlay.classList.add('d-none');
 
         if (matchedApplicant) {
-            const lName = (matchedApplicant.lastName || '').trim().toUpperCase();
-            const fName = (matchedApplicant.firstName || '').trim().toUpperCase();
-            const mName = (matchedApplicant.middleName || '').trim().toUpperCase();
-            const fullName = `${lName}, ${fName} ${mName}`.trim().replace(/\s+/g, ' ');
-
-            // Inject record data
-            document.getElementById('slip-name').innerText = fullName;
-            document.getElementById('slip-address').innerText = matchedApplicant.address || '';
-            document.getElementById('slip-qr-text').innerText = matchedApplicant.applicantNumber;
-            document.getElementById('slip-hash').innerText = "HASH CODE: " + Math.abs(hashCode(matchedApplicant.applicantNumber)).toString(16).toUpperCase();
-
-            // Set QR structure
-            document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(matchedApplicant.applicantNumber + ' | ' + fullName + ' | ' + (matchedApplicant.roomAssignment || 'N/A'))}`;
-
-            // Inject avatar images
-            const photoEl = document.getElementById('slip-photo');
-            const resolvedUrl = getDirectImageUrl(matchedApplicant.photoUrl);
-            photoEl.src = resolvedUrl || defaultAvatarUrl;
-            photoEl.onerror = function() { this.src = defaultAvatarUrl; };
-
-            // Dynamic evaluation layout configurations
-            const rawStatus = (matchedApplicant.status || '').trim().toLowerCase();
-            const remarks = (matchedApplicant.remarks || '').trim();
-            const badgeEl = document.getElementById('slip-status-badge');
-            const statusBoxEl = document.getElementById('slip-status-banner');
-            const statusIconEl = document.getElementById('slip-status-icon');
-            const statusTextEl = document.getElementById('slip-status-text');
-            const venueContainerEl = document.getElementById('slip-venue-container');
-
-            const isDenied = rawStatus.includes('deny') || rawStatus.includes('denied') || rawStatus.includes('disapprove') || rawStatus.includes('reject') || rawStatus.includes('failed') || rawStatus.includes('hindi') || rawStatus.includes('not qualified') || rawStatus.includes('tinanggihan');
-
-            if (isDenied) {
-                badgeEl.className = "badge bg-danger px-3 py-2 text-white";
-                badgeEl.innerHTML = '<i class="fas fa-times-circle me-1"></i> DISAPPROVED';
-                statusBoxEl.className = "p-3 mb-3 rounded-3 d-flex align-items-center gap-3 bg-danger-subtle border-start border-danger border-4 text-danger";
-                statusIconEl.className = "fas fa-times-circle fs-4 text-danger";
-                statusTextEl.innerHTML = `<strong>Denied due to the following reason/s:</strong><br>${remarks || 'Does not meet program qualifications.'}`;
-                document.getElementById('slip-date').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
-                document.getElementById('slip-time').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
-                document.getElementById('slip-room').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
-                venueContainerEl.className = "p-3 bg-light rounded-3 border-start border-danger border-3 mb-3 text-muted";
-                document.getElementById('slip-venue').innerHTML = `<span class="text-decoration-line-through">Not Applicable (Application Disapproved)</span>`;
-            } else {
-                badgeEl.className = "badge bg-success px-3 py-2 text-white";
-                badgeEl.innerHTML = '<i class="fas fa-check-circle me-1"></i> VERIFIED';
-                statusBoxEl.className = "p-3 mb-3 rounded-3 d-flex align-items-center gap-3 bg-success-subtle border-start border-success border-4 text-success";
-                statusIconEl.className = "fas fa-check-circle fs-4 text-success";
-                statusTextEl.innerHTML = `<strong>Recommended for Examination</strong>${remarks ? '<br><span class="small text-muted">' + remarks + '</span>' : ''}`;
-                document.getElementById('slip-date').innerText = matchedApplicant.examDate || 'May 25, 2026';
-                document.getElementById('slip-time').innerText = matchedApplicant.time || '';
-                document.getElementById('slip-room').innerText = matchedApplicant.roomAssignment || '';
-                venueContainerEl.className = "p-3 bg-light rounded-3 border-start border-primary border-3 mb-3";
-                document.getElementById('slip-venue').innerText = matchedApplicant.venue || '';
-            }
-
-            slipContainer.classList.remove('d-none');
-            slipContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            displayApplicantSlip(matchedApplicant);
         } else {
             alertBox.classList.remove('d-none');
             document.getElementById('alert-text').innerText = `No matched registration found for input: "${rawInput}". Please check spelling and capitalization and try again.`;
             alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+    }
+
+    // Bagong helper function para magpakita ng listahan ng mga kaparehong apelyido
+    function showNameSelectionDropdown(applicants) {
+        const selectorContainer = document.getElementById('selector-container');
+        selectorContainer.innerHTML = ""; // Siguraduhing malinis ang container
+
+        const colDiv = document.createElement('div');
+        colDiv.className = "col-md-8";
+
+        let listHtml = `
+            <div class="card border-0 shadow-sm p-4 rounded-3 bg-white text-start">
+                <h5 class="fw-bold text-dark mb-2">
+                    <i class="fas fa-users text-primary me-2"></i> Multiple Records Found
+                </h5>
+                <p class="text-muted small mb-3">
+                    Mayroong higit sa isang aplikante na may kaparehong apelyido. Mangyaring piliin ang iyong pangalan sa ibaba upang makita ang iyong Admittance Slip:
+                </p>
+                <div class="list-group">
+        `;
+
+        applicants.forEach((app, index) => {
+            const lName = (app.lastName || '').trim().toUpperCase();
+            const fName = (app.firstName || '').trim().toUpperCase();
+            const mName = (app.middleName || '').trim().toUpperCase();
+            const fullName = `${lName}, ${fName} ${mName}`.trim().replace(/\s+/g, ' ');
+
+            listHtml += `
+                <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3" onclick="selectApplicantFromList(${index})">
+                    <div>
+                        <strong class="text-dark d-block" style="font-size: 1.05rem;">${fullName}</strong>
+                        <small class="text-muted">
+                            <i class="fas fa-map-marker-alt text-danger me-1"></i> ${app.address || 'No Address Recorded'}
+                        </small>
+                    </div>
+                    <span class="badge bg-light text-primary border font-monospace ms-2" style="font-size: 0.85rem;">${app.applicantNumber}</span>
+                </button>
+            `;
+        });
+
+        listHtml += `
+                </div>
+            </div>
+        `;
+
+        colDiv.innerHTML = listHtml;
+        selectorContainer.appendChild(colDiv);
+        selectorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Kapag pinindot ang partikular na pangalan sa dropdown list
+    function selectApplicantFromList(index) {
+        const matchedApplicant = currentMatchedApplicants[index];
+        if (matchedApplicant) {
+            displayApplicantSlip(matchedApplicant);
+            // Tanggalin ang pagpipilian dahil nakapili na
+            document.getElementById('selector-container').innerHTML = "";
+        }
+    }
+
+    // Function na maglo-load ng slip sa UI mula sa napiling aplikante
+    function displayApplicantSlip(matchedApplicant) {
+        const slipContainer = document.getElementById('slip-container');
+        const lName = (matchedApplicant.lastName || '').trim().toUpperCase();
+        const fName = (matchedApplicant.firstName || '').trim().toUpperCase();
+        const mName = (matchedApplicant.middleName || '').trim().toUpperCase();
+        const fullName = `${lName}, ${fName} ${mName}`.trim().replace(/\s+/g, ' ');
+
+        // Inject record data
+        document.getElementById('slip-name').innerText = fullName;
+        document.getElementById('slip-address').innerText = matchedApplicant.address || '';
+        document.getElementById('slip-qr-text').innerText = matchedApplicant.applicantNumber;
+        document.getElementById('slip-hash').innerText = "HASH CODE: " + Math.abs(hashCode(matchedApplicant.applicantNumber)).toString(16).toUpperCase();
+
+        // Set QR structure
+        document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(matchedApplicant.applicantNumber + ' | ' + fullName + ' | ' + (matchedApplicant.roomAssignment || 'N/A'))}`;
+
+        // Inject avatar images
+        const photoEl = document.getElementById('slip-photo');
+        const resolvedUrl = getDirectImageUrl(matchedApplicant.photoUrl);
+        photoEl.src = resolvedUrl || defaultAvatarUrl;
+        photoEl.onerror = function() { this.src = defaultAvatarUrl; };
+
+        // Dynamic evaluation layout configurations
+        const rawStatus = (matchedApplicant.status || '').trim().toLowerCase();
+        const remarks = (matchedApplicant.remarks || '').trim();
+        const badgeEl = document.getElementById('slip-status-badge');
+        const statusBoxEl = document.getElementById('slip-status-banner');
+        const statusIconEl = document.getElementById('slip-status-icon');
+        const statusTextEl = document.getElementById('slip-status-text');
+        const venueContainerEl = document.getElementById('slip-venue-container');
+
+        const isDenied = rawStatus.includes('deny') || rawStatus.includes('denied') || rawStatus.includes('disapprove') || rawStatus.includes('reject') || rawStatus.includes('failed') || rawStatus.includes('hindi') || rawStatus.includes('not qualified') || rawStatus.includes('tinanggihan');
+
+        if (isDenied) {
+            badgeEl.className = "badge bg-danger px-3 py-2 text-white";
+            badgeEl.innerHTML = '<i class="fas fa-times-circle me-1"></i> DISAPPROVED';
+            statusBoxEl.className = "p-3 mb-3 rounded-3 d-flex align-items-center gap-3 bg-danger-subtle border-start border-danger border-4 text-danger";
+            statusIconEl.className = "fas fa-times-circle fs-4 text-danger";
+            statusTextEl.innerHTML = `<strong>Denied due to the following reason/s:</strong><br>${remarks || 'Does not meet program qualifications.'}`;
+            document.getElementById('slip-date').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
+            document.getElementById('slip-time').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
+            document.getElementById('slip-room').innerHTML = `<span class="text-muted text-decoration-line-through">N/A</span>`;
+            venueContainerEl.className = "p-3 bg-light rounded-3 border-start border-danger border-3 mb-3 text-muted";
+            document.getElementById('slip-venue').innerHTML = `<span class="text-decoration-line-through">Not Applicable (Application Disapproved)</span>`;
+        } else {
+            badgeEl.className = "badge bg-success px-3 py-2 text-white";
+            badgeEl.innerHTML = '<i class="fas fa-check-circle me-1"></i> VERIFIED';
+            statusBoxEl.className = "p-3 mb-3 rounded-3 d-flex align-items-center gap-3 bg-success-subtle border-start border-success border-4 text-success";
+            statusIconEl.className = "fas fa-check-circle fs-4 text-success";
+            statusTextEl.innerHTML = `<strong>Recommended for Examination</strong>${remarks ? '<br><span class="small text-muted">' + remarks + '</span>' : ''}`;
+            document.getElementById('slip-date').innerText = matchedApplicant.examDate || 'May 25, 2026';
+            document.getElementById('slip-time').innerText = matchedApplicant.time || '';
+            document.getElementById('slip-room').innerText = matchedApplicant.roomAssignment || '';
+            venueContainerEl.className = "p-3 bg-light rounded-3 border-start border-primary border-3 mb-3";
+            document.getElementById('slip-venue').innerText = matchedApplicant.venue || '';
+        }
+
+        slipContainer.classList.remove('d-none');
+        slipContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function updateLoader(pct, text) {
@@ -930,6 +1018,8 @@
         document.getElementById('applicant-input').value = "";
         document.getElementById('slip-container').classList.add('d-none');
         document.getElementById('search-alert').classList.add('d-none');
+        document.getElementById('selector-container').innerHTML = ""; // Burahin ang selection dropdown list
+        currentMatchedApplicants = [];
     }
 
     function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
