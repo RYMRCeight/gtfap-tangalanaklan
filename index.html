@@ -934,7 +934,7 @@
                     </div>
                 </div>
                 <h5 class="fw-bold text-dark mb-2" id="pw-section-title">Unlock Portal Section</h5>
-                <p class="text-muted small mb-4">Authentication is required to view this information. Enter the authorization password specified in the Settings Sheet.</p>
+                <p class="text-muted small mb-4">Authentication is required to view this information.</p>
                 
                 <div class="form-group text-start mb-2">
                     <label class="form-label small fw-bold text-secondary text-uppercase tracking-wide font-monospace" style="font-size: 0.75rem;">Authorization Password</label>
@@ -1591,7 +1591,7 @@
             overlay.style.opacity = '1';
             updateLoader(15, "Connecting to results repository...");
             await wait(500);
-            updateLoader(35, "Opening Sheet3 secure stream...");
+            updateLoader(35, "Please wait...");
             await wait(600);
         }
 
@@ -1710,7 +1710,7 @@
         
         document.getElementById('result-name').innerText = fullName;
         document.getElementById('result-id').innerText = matchedCandidate.applicantNumber;
-        document.getElementById('result-hash').innerText = "HASH SCORE: " + Math.abs(hashCode(matchedCandidate.applicantNumber + "-score")).toString(16).toUpperCase();
+        document.getElementById('result-hash').innerText = "HASH: " + Math.abs(hashCode(matchedCandidate.applicantNumber + "-score")).toString(16).toUpperCase();
 
         if (FeatureConfig.enablePhotoDisplay) {
             const photoEl = document.getElementById('result-photo');
